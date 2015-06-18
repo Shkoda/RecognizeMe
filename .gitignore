@@ -2,7 +2,7 @@
 *.unityproj
 *.pidb
 *.userprefs
-*.meta
+
 /Library
 /Temp
 /_ReSharper*

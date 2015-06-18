@@ -57,7 +57,12 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         #endregion
 
-
+        [UsedImplicitly]
+        private void Awake()
+        {
+            Instance = this;
+            this.gameSet = this.GetComponent<GameSet>();
+        }
 
         // Use this for initialization
         private void Start()

@@ -30,6 +30,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                     .Select(o => o.GetComponent<Tile>())
                     .Where(tile => tile != null)
                     .ToList();
+         
             this.allCells =
                 GameObject.FindGameObjectsWithTag("Cell")
                     .Select(o => o.GetComponent<Cell>())

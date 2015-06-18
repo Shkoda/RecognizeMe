@@ -24,6 +24,14 @@ public class AppController : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
+    private void Awake()
+    {
+        instance = this;
+
+        LeanTween.init(2000);
+    }
+
 
     public static Coroutine StartRoutine(IEnumerator routine)
     {
