@@ -10,6 +10,18 @@ namespace Shkoda.RecognizeMe.Core.Mechanics.Actions.Handlers
     using System.Text;
    public abstract class GameActionHandler
     {
+
+       protected bool triggerAchievements;
+
+        /// <summary>
+        /// If seed is -1, achievements' triggers are not processed
+        /// </summary>
+        /// <param name="seed"></param>
+        public GameActionHandler(int seed)
+        {
+            this.triggerAchievements = (seed != -1);
+        }
+
        public virtual void HandleAction(IAction action)
        {
 //           var move = action as MoveAction;

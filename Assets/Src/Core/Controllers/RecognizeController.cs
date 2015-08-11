@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Src.Core.Game.Tile;
+using Shkoda.RecognizeMe.Core;
 using Shkoda.RecognizeMe.Core.Game.Achievements;
+using Shkoda.RecognizeMe.Core.Game.Cell;
+using Shkoda.RecognizeMe.Core.Graphics;
 using Shkoda.RecognizeMe.Core.Graphics.Events;
 using Shkoda.RecognizeMe.Core.Mechanics;
 using Shkoda.RecognizeMe.Core.Mechanics.Actions;
@@ -15,17 +19,24 @@ namespace Shkoda.Rec.Core.Controllers
     {
         private readonly List<IAction> actions = new List<IAction>();
         protected readonly Graphics Graphics;
-             public event Action<GameFinishedEventArgs> GameFinished = delegate { };
-             public event Action TilesInitialized = delegate { };
-        protected RecognizeController(GameActionHandler actionHandler)
-        {
-            Graphics = Graphics.Instance;
+        private Mechanics mechanics = new SimpleMechanics();
+        public event Action<GameFinishedEventArgs> GameFinished = delegate { };
+        public event Action TilesInitialized = delegate { };
 
-            ActionsHandler = actionHandler;
+        public Mechanics Mechanics
+        {
+            get { return mechanics; }
         }
 
-        protected Mechanics Mechanics { get; private set; }
+//        protected Mechanics Mechanics { get; private set; }
         public GameActionHandler ActionsHandler { get; set; }
+        public RecognizeController(int seed)
+        {
+            Graphics = Graphics.Instance;
+            ActionsHandler = new  SimpleActionHandler(seed);
+            mechanics.Seed = seed;
+        }
+
 
         /// <summary>
         ///     Called when game is finished
@@ -77,85 +88,76 @@ namespace Shkoda.Rec.Core.Controllers
             // Should wait till the end of init
             yield return AppController.StartRoutine(Graphics.Init());
 
+            this.Mechanics.Reset();
+
             // Init all cards
             if (isTutorial)
             {
-               Mechanics.DealTutorial();
+                Mechanics.DealTutorial();
             }
             else
             {
-                Mechanics.Deal();
+                Mechanics.Deal(Graphics.Instance.GameProperties);
             }
 
+            float duration = 0.03f;
             // Deal closed cards
             var delay = 0;
             const float Duration = 0.06f;
+            var n = 0;
 
-//            // Deal tableaux 
-//            for (var tableauNumber = 0; tableauNumber < 7; tableauNumber++)
-//            {
-//                var dstId = new DeckId(DeckClass.Tableau, tableauNumber);
-//                var tableau = mechanics.Tableaux[tableauNumber];
-//                var cardsInTableau = tableau.Count;
-//                delay += Math.Max(0, cardsInTableau - 1);
-//
-//                for (var cardNumber = 0; cardNumber < cardsInTableau; cardNumber++)
-//                {
-//                    // Move closed card (animation)
-//                    Graphics.MoveTopCard(DeckId.DefaultDeck, dstId, Duration*(delay + cardNumber));
-//
-//                    // Define card value
-//                    var cardValue = tableau.CardValues[cardsInTableau - cardNumber - 1];
-//                    Graphics.SetCardValue(dstId, cardNumber, false, cardValue);
-//                }
-//            }
-//
-//            // Deal foundations 
-//            delay += this.DealDecksWithOpenedCards(this.mechanics.Foundations, Duration, delay*Duration);
-//
-//            // Deal Waste
-//            delay += this.DealDeckWithOpenedCards(this.mechanics.Waste, Duration, delay*Duration);
-//
-//            // Stock deal animation 
-//            var stockDeckId = new DeckId(DeckClass.Stock);
-//            var cardsInStock = mechanics.Stock.Count;
-//            for (var i = 0; i < cardsInStock; i++)
-//            {
-//                // Move closed card (animation)
-//                Graphics.MoveTopCard(DeckId.DefaultDeck, stockDeckId, (delay + 7 + i)*Duration);
-//
-//                // Define card value
-//                var cardValue = mechanics.Stock[cardsInStock - 1 - i].CardValue;
-//                Graphics.SetCardValue(stockDeckId, i, false, cardValue);
-//            }
-//
-//            // Wait for deal animations to finish
-//            yield return new WaitForSeconds(6*Duration + 0.1f);
-//
-//            Graphics.MoveToGame(GameType.Klondike);
-//
-//            yield return new WaitForSeconds((delay + 7)*Duration);
-//
-//            // Flip all opened tableau cards
-//            for (var tableauNumber = 0; tableauNumber < 7; tableauNumber++)
-//            {
-//                var tableau = mechanics.Tableaux[tableauNumber];
-//                if (tableau.Any)
-//                {
-//                    var deckId = new DeckId(DeckClass.Tableau, tableauNumber);
-//
-//                    for (var i = 0; i < tableau.Count; i++)
-//                    {
-//                        if (tableau[i].Opened)
-//                        {
-//                            Graphics.FlipCard(deckId, i, true, Duration*tableauNumber);
-//                        }
-//                    }
-//                }
-//            }
-//
-//            yield return new WaitForSeconds(8*Duration); // tableau count = 8
-//            this.OnCardsInitialized();
+            n += this.DealTile(this.Mechanics.Cells, duration, 0);
+
+            yield return new WaitForSeconds(n*duration);
+
+            this.OnTilesInitialized();
+        }
+
+
+        protected virtual void OnTilesInitialized()
+        {
+            TilesInitialized();
+        }
+
+        protected int DealTile(CellModel[][] cells,
+            float animationDuration,
+            float delayBeforeFirstAnimation)
+        {
+            int dealed = 0;
+
+            for (int row = 0, n = cells.Length; row < n; row++)
+            {
+                for (int column = 0; column < cells[0].Length; column++)
+                {
+                    dealed += this.DealTile(
+                        cells[row][column],
+                        animationDuration,
+                        delayBeforeFirstAnimation + dealed*animationDuration);
+                }
+            }
+
+            return dealed;
+        }
+
+
+
+        protected int DealTile(CellModel cell, float animationDuration, float delayBeforeFirstAnimation)
+        {
+            int dealed = 0;
+
+            var cellValue = cell.Tile.TileValue;
+          
+
+
+            float currentDelay = delayBeforeFirstAnimation + animationDuration*dealed;
+            var dstId = cell.Tile;
+       
+            this.Graphics.MoveTopCard(new CellId(), cell.CellId, currentDelay);
+            this.Graphics.SetTileValue(cell.CellId, cellValue);
+            dealed++;
+
+
+            return 1;
         }
 
 
@@ -164,6 +166,4 @@ namespace Shkoda.Rec.Core.Controllers
 //            throw new NotImplementedException();
         }
     }
-
-
 }

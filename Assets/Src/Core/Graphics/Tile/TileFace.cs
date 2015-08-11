@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -11,16 +12,16 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         [EditorAssigned] public int TileRowsPerVertical;
         [EditorAssigned] public Texture2D TileSheet;
         [EditorAssigned] public Rect TileSpaceInSheet;
-
+        private static Rect backsCoordinates;
         public static Rect GetUvForCard(TileValue value)
         {
             return tilesCoordinates[value];
         }
 
-//        public static Rect GetUvForBack()
-//        {
-//            return backsCoordinates[CardBack.CurrentId];
-//        }
+        public static Rect GetUvForBack()
+        {
+            return backsCoordinates;
+        }
 
         private void Awake()
         {

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections;
 using JetBrains.Annotations;
-
+using Shkoda.RecognizeMe.Core.Game;
 using UnityEngine;
-
+using Graphics = Shkoda.RecognizeMe.Core.Graphics.Graphics;
 
 [UsedImplicitly]
 public class AppController : MonoBehaviour
 {
-    private GameObject RecognizeMePrefab;
+    public GameObject RecognizeMePrefab;
 
     private static Game game;
 
@@ -18,20 +18,41 @@ public class AppController : MonoBehaviour
 
     public static Game Game
     {
-        get
-        {
-            return game;
-        }
+        get { return game; }
     }
 
     [UsedImplicitly]
     private void Awake()
     {
         instance = this;
-
         LeanTween.init(2000);
     }
 
+    [UsedImplicitly]
+    private void Start()
+    {
+        Graphics.Instance.GameChosen += this.OnGameChosen;
+        Graphics.Instance.GameClosed += this.OnGameClosed;
+    }
+
+
+    private void OnGameChosen(Game newGame)
+    {
+        this.fieldObject = Instantiate(this.RecognizeMePrefab) as GameObject;
+
+
+        game = newGame;
+//        game.Player = player;
+//        player.StartGame(game);
+
+        game.Start();
+    }
+
+    private void OnGameClosed()
+    {
+        this.CleanUp();
+//        player.FinishGame();
+    }
 
     public static Coroutine StartRoutine(IEnumerator routine)
     {
@@ -61,7 +82,4 @@ public class AppController : MonoBehaviour
             fieldObject = null;
         }
     }
-
-
-
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Assets.Src.Core.Game.Tile;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -11,17 +12,28 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         private BoxCollider boxCollider;
 
-        [EditorAssigned] public int DeckNumber;
+        public CellId CellId;
 
         private Vector3 defaultColliderBorderSize;
         private Vector3 position;
         private Tile tile;
         public Guid Id { get; private set; }
 
+        public Tile Tile { get; private set; }
+
         public void PushAndMoveInstantly(Tile tile)
         {
             PushTile(tile);
             tile.MoveInstantlyTo(GetPositionFor(tile), GetRotationFor(tile));
+        }
+
+        public Tile PopTile()
+        {
+            var popped = this.Tile;
+            popped.ContainingCell = null;
+            this.Tile = null;
+            UpdateColliderSize();
+            return popped;
         }
 
         public void PushTile(Tile tile)
@@ -109,6 +121,11 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
             boxCollider.size = new Vector3(1, 1, 1) + defaultColliderBorderSize;
             boxCollider.center = Vector3.zero;
+        }
+
+        public bool HasId(CellId id)
+        {
+            return this.CellId.Equals(id);
         }
     }
 }

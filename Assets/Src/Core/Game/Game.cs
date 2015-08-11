@@ -1,75 +1,86 @@
-﻿using System;
-using System.Collections;
-using System.Diagnostics;
-using Shkoda.Rec.Core.Controllers;
-using Shkoda.RecognizeMe.Core.Game.Achievements;
-using UnityEngine;
-using Debug = UnityEngine.Debug;
-using Graphics = Shkoda.RecognizeMe.Core.Graphics.Graphics;
-
-public abstract class Game
+﻿namespace Shkoda.RecognizeMe.Core.Game
 {
-    private readonly Graphics graphics = Graphics.Instance;
-    private readonly Stopwatch timer = new Stopwatch();
-    private readonly IEnumerator timerRoutine;
+    using System;
+    using System.Collections;
+    using System.Diagnostics;
+    using Shkoda.Rec.Core.Controllers;
+    using Shkoda.RecognizeMe.Core.Game.Achievements;
+    using UnityEngine;
+    using Debug = UnityEngine.Debug;
+    using Graphics = Shkoda.RecognizeMe.Core.Graphics.Graphics;
+    using Random = UnityEngine.Random;
 
-    protected Game()
+    public  class Game
     {
-        timerRoutine = UpdateTimerInHud();
-    }
+        private readonly Graphics graphics = Graphics.Instance;
+        public RecognizeController Controller { get; protected set; }
+        private readonly Stopwatch timer = new Stopwatch();
+        private readonly IEnumerator timerRoutine;
 
-    public RecognizeController Controller { get; protected set; }
-    public event Action<GameFinishedEventArgs> GameFinished = delegate { };
+        public event Action<GameFinishedEventArgs> GameFinished = delegate { };
 
-    public void Start()
-    {
-        Controller.Subscribe();
-        Controller.StartGame();
-        Controller.TilesInitialized += GameInitialized;
-        Controller.GameFinished += OnGameFinished;
-    }
-
-    private IEnumerator UpdateTimerInHud()
-    {
-        while (true)
+        public Game(int seed)
         {
-            Graphics.Instance.UpdateTimer(timer.ElapsedMilliseconds);
-            yield return new WaitForSeconds(1);
+            timerRoutine = UpdateTimerInHud();
+            Controller = new RecognizeController(seed);
         }
-    }
 
-    private void GameInitialized()
-    {
-        timer.Start();
-        AppController.StartRoutine(timerRoutine);
-    }
 
-    private void OnGameFinished(GameFinishedEventArgs args)
-    {
-        Debug.Log("Game Finishing...");
-        timer.Stop();
-        args.Time = Math.Max(1, timer.ElapsedMilliseconds/1000);
+        public void Start()
+        {
+            Controller.Subscribe();
+            Controller.StartGame();
+            Controller.TilesInitialized += GameInitialized;
+            Controller.GameFinished += OnGameFinished;
+        }
+
+        public static int RandomSeed()
+        {
+            return (int) (Random.value*32000);
+        }
+
+        private IEnumerator UpdateTimerInHud()
+        {
+            while (true)
+            {
+                Graphics.Instance.UpdateTimer(timer.ElapsedMilliseconds);
+                yield return new WaitForSeconds(1);
+            }
+        }
+
+        private void GameInitialized()
+        {
+            timer.Start();
+            AppController.StartRoutine(timerRoutine);
+        }
+
+        private void OnGameFinished(GameFinishedEventArgs args)
+        {
+            Debug.Log("Game Finishing...");
+            timer.Stop();
+            args.Time = Math.Max(1, timer.ElapsedMilliseconds/1000);
 //        var timePoints = Math.Min(200, (int)(100000 / args.Time));
 //        PointsEarned(timePoints);
 //        args.Points += timePoints;
-        GameFinished(args);
+            GameFinished(args);
 //        graphics.ShowWin(args);
-    }
+        }
 
-    public void CleanUp()
-    {
-        Controller.CleanUp();
+        public void CleanUp()
+        {
+            Controller.CleanUp();
 #if UNITY_EDITOR
-        Controller.OnApplicationQuit();
+            Controller.OnApplicationQuit();
 #endif
-        UnSubscribe();
-        AppController.StopRoutine(timerRoutine);
-        Graphics.Instance.CleanUpGameHud();
-    }
+            UnSubscribe();
+            AppController.StopRoutine(timerRoutine);
+            Graphics.Instance.CleanUpGameHud();
+        }
 
-    private void UnSubscribe()
-    {
-        Controller.TilesInitialized -= GameInitialized;
-        Controller.GameFinished -= OnGameFinished;
+        private void UnSubscribe()
+        {
+            Controller.TilesInitialized -= GameInitialized;
+            Controller.GameFinished -= OnGameFinished;
+        }
     }
 }
