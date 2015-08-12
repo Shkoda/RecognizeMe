@@ -13,7 +13,7 @@
         {
             end -= start;
             value = value - 1;
-            return end * (value * value * ((EaseBackForIconsParam + 1) * value + EaseBackForIconsParam) + 1) + start;
+            return end*(value*value*((EaseBackForIconsParam + 1)*value + EaseBackForIconsParam) + 1) + start;
         }
     }
 }

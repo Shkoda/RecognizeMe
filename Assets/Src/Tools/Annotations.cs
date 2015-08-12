@@ -7,6 +7,7 @@
 // ReSharper disable IntroduceOptionalParameters.Global
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
+
 namespace JetBrains.Annotations
 {
     using System;
@@ -242,7 +243,7 @@ namespace JetBrains.Annotations
     ///   }
     /// }
     /// </code></example>
-    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false, 
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false,
         Inherited = true)]
     public sealed class CannotApplyEqualityOperatorAttribute : Attribute
     {
@@ -259,7 +260,7 @@ namespace JetBrains.Annotations
     /// public class MyComponent : IComponent { }
     /// </code></example>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    [BaseTypeRequired(typeof(Attribute))]
+    [BaseTypeRequired(typeof (Attribute))]
     public sealed class BaseTypeRequiredAttribute : Attribute
     {
         public BaseTypeRequiredAttribute([NotNull] Type baseType)
@@ -344,22 +345,22 @@ namespace JetBrains.Annotations
     [Flags]
     public enum ImplicitUseKindFlags
     {
-        Default = Access | Assign | InstantiatedWithFixedConstructorSignature, 
+        Default = Access | Assign | InstantiatedWithFixedConstructorSignature,
 
         /// <summary>Only entity marked with attribute considered used</summary>
-        Access = 1, 
+        Access = 1,
 
         /// <summary>Indicates implicit assignment to a member</summary>
-        Assign = 2, 
+        Assign = 2,
 
         /// <summary>
         /// Indicates implicit instantiation of a type with fixed constructor signature.
         /// That means any unused constructor parameters won't be reported as such.
         /// </summary>
-        InstantiatedWithFixedConstructorSignature = 4, 
+        InstantiatedWithFixedConstructorSignature = 4,
 
         /// <summary>Indicates implicit instantiation of a type</summary>
-        InstantiatedNoFixedConstructorSignature = 8, 
+        InstantiatedNoFixedConstructorSignature = 8,
     }
 
     /// <summary>
@@ -370,12 +371,12 @@ namespace JetBrains.Annotations
     [Flags]
     public enum ImplicitUseTargetFlags
     {
-        Default = Itself, 
+        Default = Itself,
 
-        Itself = 1, 
+        Itself = 1,
 
         /// <summary>Members of entity marked with attribute are considered used</summary>
-        Members = 2, 
+        Members = 2,
 
         /// <summary>Entity marked with attribute and all its members considered used</summary>
         WithMembers = Itself | Members

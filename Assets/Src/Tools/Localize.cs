@@ -4,7 +4,7 @@ namespace GlobalPlay.Tools
     using UnityEngine;
     using UnityEngine.UI;
 
-    [RequireComponent(typeof(Text))]
+    [RequireComponent(typeof (Text))]
     public sealed class Localize : MonoBehaviour
     {
         private Text label;

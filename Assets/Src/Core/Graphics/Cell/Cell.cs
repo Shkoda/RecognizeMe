@@ -10,16 +10,16 @@ namespace Shkoda.RecognizeMe.Core.Graphics
     {
         [SerializeField] private GameObject animationPrefab;
 
-        private BoxCollider boxCollider;
+//        private BoxCollider boxCollider;
 
         public CellId CellId;
 
         private Vector3 defaultColliderBorderSize;
         private Vector3 position;
         private Tile tile;
-        public Guid Id { get; private set; }
+//        public Guid Id { get; private set; }
 
-        public Tile Tile { get; private set; }
+        public Tile Tile { get; set; }
 
         public void PushAndMoveInstantly(Tile tile)
         {
@@ -106,26 +106,32 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         private void Awake()
         {
             position = transform.position;
-            boxCollider = GetComponent<BoxCollider>();
-            defaultColliderBorderSize = boxCollider.size - new Vector3(1, 1, 1);
+//            boxCollider = GetComponent<BoxCollider>();
+//            defaultColliderBorderSize = boxCollider.size - new Vector3(1, 1, 1);
         }
 
         private void UpdateColliderSize()
         {
-            if (!boxCollider)
-            {
-                Debug.LogWarning("boxCollider was destroyed");
-                return;
-            }
-
-
-            boxCollider.size = new Vector3(1, 1, 1) + defaultColliderBorderSize;
-            boxCollider.center = Vector3.zero;
+//            if (!boxCollider)
+//            {
+//                Debug.LogWarning("boxCollider was destroyed");
+//                return;
+//            }
+//
+//
+//            boxCollider.size = new Vector3(1, 1, 1) + defaultColliderBorderSize;
+//            boxCollider.center = Vector3.zero;
         }
 
         public bool HasId(CellId id)
         {
             return this.CellId.Equals(id);
+        }
+
+        public override string ToString()
+        {
+            var content = Tile == null ? "EMPTY" : Tile.TileValue.ToString();
+            return String.Format("{0} [{1}]", CellId, content);
         }
     }
 }

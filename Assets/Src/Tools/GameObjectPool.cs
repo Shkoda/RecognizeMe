@@ -4,15 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.CompilerServices;
-
     using JetBrains.Annotations;
-
     using UnityEngine;
     using UnityObject = UnityEngine.Object;
 
     public class GameObjectPool : MonoBehaviour
     {
-        private readonly Dictionary<GameObject, List<GameObject>> poolDictionary = new Dictionary<GameObject, List<GameObject>>();
+        private readonly Dictionary<GameObject, List<GameObject>> poolDictionary =
+            new Dictionary<GameObject, List<GameObject>>();
 
         private readonly Dictionary<GameObject, GameObject> prefabDictionary = new Dictionary<GameObject, GameObject>();
 
@@ -32,7 +31,7 @@
             {
                 var obj = list[0];
                 list.RemoveAt(0);
-                obj.SetActive(true);    
+                obj.SetActive(true);
 //                Instance.prefabDictionary[obj] = prefab;
 //                Debug.Log("Return from pool " + obj.name + " # " + obj.GetInstanceID());
                 return obj;
@@ -74,7 +73,7 @@
             Recycle(obj);
         }
 
-            [UsedImplicitly]
+        [UsedImplicitly]
         private void Awake()
         {
             Instance = this;

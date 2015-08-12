@@ -1,11 +1,9 @@
 namespace GlobalPlay.Tools
 {
     using System;
-
     using JetBrains.Annotations;
-
     using UnityEngine;
-    
+
     public class BezierMover : MonoBehaviour
     {
         private float actualRadius;
@@ -16,12 +14,12 @@ namespace GlobalPlay.Tools
         public Vector3 EndPoint;
 
         public float TotalTime = 3f;
-        
+
         private Vector3 startHandle;
         private Vector3 centerToStartHandle, centerToEndHandle;
         private Vector3 endHandle;
         private Vector3 prevPos;
-        
+
         public void Start()
         {
             this.startHandle = StartPoint + Vector3.up*2;
@@ -31,7 +29,7 @@ namespace GlobalPlay.Tools
 
             LeanTween.move(
                 this.gameObject,
-                new[] { this.StartPoint, this.endHandle, this.startHandle, this.EndPoint },
+                new[] {this.StartPoint, this.endHandle, this.startHandle, this.EndPoint},
                 this.TotalTime).setEase(LeanTweenType.linear).setOnComplete(this.OnMovingComplete);
         }
 

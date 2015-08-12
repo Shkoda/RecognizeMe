@@ -1,7 +1,6 @@
 ﻿namespace GlobalPlay.Tools
 {
     using System;
-
     using UnityEngine;
 
     public class TimeUtil
@@ -10,7 +9,7 @@
 
         public static String FormatTime(TimeSpan time)
         {
-            return string.Format("{0:00}:{1:00}:{2:00}", (uint)time.TotalHours, time.Minutes, time.Seconds);
+            return string.Format("{0:00}:{1:00}:{2:00}", (uint) time.TotalHours, time.Minutes, time.Seconds);
         }
 
         public static void SetServerTime(long serverTime)
@@ -29,7 +28,7 @@
             }
 
             var utcDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            utcDateTime = utcDateTime.AddSeconds(Math.Round(time / 1000d));
+            utcDateTime = utcDateTime.AddSeconds(Math.Round(time/1000d));
             return utcDateTime;
         }
 

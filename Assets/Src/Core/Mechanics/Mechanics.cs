@@ -6,12 +6,12 @@ using Shkoda.RecognizeMe.Core.Graphics;
 
 namespace Shkoda.RecognizeMe.Core.Mechanics
 {
-
     using UnityEngine;
     using System.Collections;
 
     public abstract class Mechanics
     {
+        protected GameProperties gameProperties;
         protected CellModel[][] cells;
 
         public CellModel[][] Cells
@@ -21,9 +21,15 @@ namespace Shkoda.RecognizeMe.Core.Mechanics
 
         public int Seed { get; set; }
 
-        protected readonly List<TileModel> Set = new List<TileModel>();
-        public abstract void Deal(GameProperties properties);
-        public abstract void DealTutorial();
+        protected readonly List<TileModel> tiles = new List<TileModel>();
+
+        public List<TileModel> Tiles
+        {
+            get { return tiles; }
+        }
+
+        public abstract void GenerateRandomTileSet(GameProperties properties);
+        public abstract void GenerateTutorialTileSet();
 
         public void Reset()
         {
@@ -31,4 +37,3 @@ namespace Shkoda.RecognizeMe.Core.Mechanics
         }
     }
 }
-

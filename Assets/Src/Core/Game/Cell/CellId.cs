@@ -21,9 +21,10 @@ namespace Assets.Src.Core.Game.Tile
         public bool Equals(CellId other)
         {
             return this.Number == other.Number
-                && this.Row == other.Row
-                && this.Column == other.Column;
+                   && this.Row == other.Row
+                   && this.Column == other.Column;
         }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -31,13 +32,12 @@ namespace Assets.Src.Core.Game.Tile
                 return false;
             }
 
-            return obj is CellId && this.Equals((CellId)obj);
+            return obj is CellId && this.Equals((CellId) obj);
         }
 
         public override string ToString()
         {
-            return String.Format("Cell #{0} [{1} {2}]", Number, Row, Column);
+            return String.Format("CellId #{0} [{1} {2}]", Number, Row, Column);
         }
     }
-
 }

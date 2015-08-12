@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-
 using Assets.Src.Debug.Cheats;
-
 using UnityEngine;
 
 public class ButtonPanel : MonoBehaviour
@@ -15,8 +13,7 @@ public class ButtonPanel : MonoBehaviour
 
     public string TabName = "Cheats";
 
-    [Range(0, 1)]
-    public float RelationPositionX;
+    [Range(0, 1)] public float RelationPositionX;
 
     private const float WindowHeaderHeight = 17f;
 
@@ -58,15 +55,9 @@ public class ButtonPanel : MonoBehaviour
 
     public int DebugWindowId
     {
-        get
-        {
-            return this.debugWindowId;
-        }
+        get { return this.debugWindowId; }
 
-        set
-        {
-            this.debugWindowId = value;
-        }
+        set { this.debugWindowId = value; }
     }
 
     #region Updates, GUI
@@ -76,10 +67,10 @@ public class ButtonPanel : MonoBehaviour
     {
         this.windowRect = new Rect(0, 0, Screen.width, 0);
 
-        this.buttonHeight = Screen.height * 0.04f;
-        this.buttonWidth = this.buttonHeight * 3;
+        this.buttonHeight = Screen.height*0.04f;
+        this.buttonWidth = this.buttonHeight*3;
 
-        this.ButtonXPosition = Math.Max(Screen.width * this.RelationPositionX - this.buttonWidth, 0);
+        this.ButtonXPosition = Math.Max(Screen.width*this.RelationPositionX - this.buttonWidth, 0);
         this.buttonYPosition = Screen.height - this.buttonHeight;
 
         if (ActionList == null)
@@ -96,20 +87,20 @@ public class ButtonPanel : MonoBehaviour
         {
             if (performable != null)
             {
-                var cheat = new CheatButton(performable, ElementHeight(performable.Name), totalTextHeight + 2 * Margin);
+                var cheat = new CheatButton(performable, ElementHeight(performable.Name), totalTextHeight + 2*Margin);
                 this.buttonList.Add(cheat);
                 totalTextHeight += cheat.Height;
             }
         }
 
-  		foreach (var script in ScriptList)
+        foreach (var script in ScriptList)
         {
             if (script != null)
             {
                 var scriptButton = new ScriptButton(
-                    script, 
-                    ElementHeight(script.GetType().ToString()), 
-                    totalTextHeight + 2 * Margin);
+                    script,
+                    ElementHeight(script.GetType().ToString()),
+                    totalTextHeight + 2*Margin);
                 this.buttonList.Add(scriptButton);
                 totalTextHeight += scriptButton.Height;
             }
@@ -141,7 +132,7 @@ public class ButtonPanel : MonoBehaviour
 
     private float ElementHeight(string elementText)
     {
-        return elementText.Split('\n').Length * LineHeight + TableHeight;
+        return elementText.Split('\n').Length*LineHeight + TableHeight;
     }
 
     // Update is called once per frame
@@ -159,12 +150,12 @@ public class ButtonPanel : MonoBehaviour
             isDragging = false;
             float y = isDraggingWithMouse ? Input.mousePosition.y : Input.GetTouch(0).position.y;
 
-            if (y > Screen.height * 0.1 && y < boundTopY * 0.9)
+            if (y > Screen.height*0.1 && y < boundTopY*0.9)
             {
                 this.isFixed = true;
                 this.isMaximized = false;
             }
-            else if (y > Screen.height * 0.1)
+            else if (y > Screen.height*0.1)
             {
                 this.isMaximizing = true;
             }
@@ -185,7 +176,7 @@ public class ButtonPanel : MonoBehaviour
     {
         return
             GUI.RepeatButton(
-                new Rect(this.ButtonXPosition, this.buttonYPosition + 2 * Margin, this.buttonWidth, this.buttonHeight),
+                new Rect(this.ButtonXPosition, this.buttonYPosition + 2*Margin, this.buttonWidth, this.buttonHeight),
                 new GUIContent(this.TabName),
                 this.buttonStyle);
     }
@@ -264,7 +255,7 @@ public class ButtonPanel : MonoBehaviour
         return
             GUI.BeginScrollView(
                 new Rect(
-                    Margin * 2,
+                    Margin*2,
                     this.buttonHeight + WindowHeaderHeight + Margin,
                     this.windowRect.width - 6,
                     scrollViewHeight),
@@ -275,14 +266,14 @@ public class ButtonPanel : MonoBehaviour
     private bool ActionPressed(ConsoleButton cheat)
     {
         return GUI.Button(
-            new Rect(0, cheat.Offset + Margin, this.windowRect.width - 21 - Margin, cheat.Height - Margin), 
-            "[Perform Action] " + cheat.Name, 
+            new Rect(0, cheat.Offset + Margin, this.windowRect.width - 21 - Margin, cheat.Height - Margin),
+            "[Perform Action] " + cheat.Name,
             this.textStyle);
     }
 
     private void OnPanelIsVisible(int windowId)
     {
-        float scrollViewHeight = this.windowRect.height - Margin * 2 - WindowHeaderHeight - this.buttonHeight;
+        float scrollViewHeight = this.windowRect.height - Margin*2 - WindowHeaderHeight - this.buttonHeight;
 
         if (scrollViewHeight > 0)
         {
@@ -307,5 +298,6 @@ public class ButtonPanel : MonoBehaviour
             GUI.EndScrollView();
         }
     }
+
     #endregion
 }

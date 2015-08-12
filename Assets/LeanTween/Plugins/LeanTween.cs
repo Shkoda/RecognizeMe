@@ -1113,7 +1113,7 @@ public class LTDescr{
 	}
 
 	/**
-	* Set the type of easing used for the tween. <br>
+	* tiles the type of easing used for the tween. <br>
 	* <ul><li><a href="LeanTweenType.html">List of all the ease types</a>.</li>
 	* <li><a href="http://www.robertpenner.com/easing/easing_demo.html">This page helps visualize the different easing equations</a></li>
 	* </ul>
@@ -1130,7 +1130,7 @@ public class LTDescr{
 	}
 
 	/**
-	* Set the type of easing used for the tween with a custom curve. <br>
+	* tiles the type of easing used for the tween with a custom curve. <br>
 	* @method setEase (AnimationCurve)
 	* @param {AnimationCurve} easeDefinition:AnimationCurve an <a href="http://docs.unity3d.com/Documentation/ScriptReference/AnimationCurve.html" target="_blank">AnimationCure</a> that describes the type of easing you want, this is great for when you want a unique type of movement
 	* @return {LTDescr} LTDescr an object that distinguishes the tween
@@ -1171,7 +1171,7 @@ public class LTDescr{
 	}
 
 	/**
-	* Set the tween to repeat a number of times.
+	* tiles the tween to repeat a number of times.
 	* @method setRepeat
 	* @param {int} repeatNum:int the number of times to repeat the tween. -1 to repeat infinite times
 	* @return {LTDescr} LTDescr an object that distinguishes the tween
@@ -1459,7 +1459,7 @@ public class LTDescr{
 	}
 
 	/**
-	* Set the point at which the GameObject will be rotated around
+	* tiles the point at which the GameObject will be rotated around
 	* @method setPoint
 	* @param {Vector3} point:Vector3 point at which you want the object to rotate around (local space)
 	* @return {LTDescr} LTDescr an object that distinguishes the tween
@@ -1482,7 +1482,7 @@ public class LTDescr{
 	}
 	
 	/**
-	* Set the onComplete method to be called at the end of every loop cycle (also applies to the delayedCall method)
+	* tiles the onComplete method to be called at the end of every loop cycle (also applies to the delayedCall method)
 	* @method setOnCompleteOnRepeat
 	* @param {bool} isOn:bool does call onComplete on every loop cycle
 	* @return {LTDescr} LTDescr an object that distinguishes the tween
@@ -1648,7 +1648,7 @@ public static void update() {
 					if((tween.passed + dt > tween.time && tween.direction > 0.0f )){
 						// Debug.Log("i:"+i+" passed:"+tween.passed+" dt:"+dt+" time:"+tween.time+" dir:"+tween.direction);
 						isTweenFinished = true;
-						tween.passed = tween.time; // Set to the exact end time so that it can finish tween exactly on the end value
+						tween.passed = tween.time; // tiles to the exact end time so that it can finish tween exactly on the end value
 					}else if(tween.direction<0.0f && tween.passed - dt < 0.0f){
 						isTweenFinished = true;
 						tween.passed = Mathf.Epsilon;
@@ -1658,7 +1658,7 @@ public static void update() {
 				if(!tween.hasInitiliazed && ((tween.passed==0.0 && tween.delay==0.0) || tween.passed>0.0) ){
 					tween.hasInitiliazed = true;
 
-					// Set time based on current timeScale
+					// tiles time based on current timeScale
 					if( !tween.useEstimatedTime ){
 						tween.time = tween.time*Time.timeScale;
 					}

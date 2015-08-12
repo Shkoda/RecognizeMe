@@ -8,8 +8,6 @@ using Graphics = Shkoda.RecognizeMe.Core.Graphics.Graphics;
 [UsedImplicitly]
 public class AppController : MonoBehaviour
 {
-    public GameObject RecognizeMePrefab;
-
     private static Game game;
 
     private static AppController instance;
@@ -38,9 +36,7 @@ public class AppController : MonoBehaviour
 
     private void OnGameChosen(Game newGame)
     {
-        this.fieldObject = Instantiate(this.RecognizeMePrefab) as GameObject;
-
-
+//        Debug.Log("AppController.OnGameChosen");
         game = newGame;
 //        game.Player = player;
 //        player.StartGame(game);

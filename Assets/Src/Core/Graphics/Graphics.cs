@@ -1,4 +1,6 @@
 ﻿using Assets.Src.Core.Game.Tile;
+using Assets.Src.Core.Graphics.Field;
+using Shkoda.RecognizeMe.Core.Game.Tile;
 using Shkoda.RecognizeMe.Core.Graphics.Events;
 
 namespace Shkoda.RecognizeMe.Core.Graphics
@@ -11,8 +13,8 @@ namespace Shkoda.RecognizeMe.Core.Graphics
     using JetBrains.Annotations;
     using UnityEngine;
     using Object = UnityEngine.Object;
-
     using Shkoda.RecognizeMe.Core.Game;
+
     public class Graphics : MonoBehaviour
     {
         public static Graphics Instance { get; private set; }
@@ -25,6 +27,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public event Action<Game> GameChosen = delegate { };
         public event Action GameClosed = delegate { };
+
         #region Redirected events
 
         public event EventHandler<StartTileSelectionEventArgs> TileSelectionStarted
@@ -75,7 +78,13 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public IEnumerator Init()
         {
+//            Debug.Log("Graphics.Init()");
             yield return AppController.StartRoutine(this.gameSet.Init());
+        }
+
+        public void InitTiles(List<TileModel> Set)
+        {
+            this.gameSet.InitTiles(Set);
         }
 
         public void UpdateTimer(long time)
@@ -124,26 +133,14 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         public void NewGame(int seed)
         {
             this.shouldStartTutorial = false;
-//            this.MainGui.GameGui.DisableTutorial();
-//            this.HideLooseGui();
-//            this.GameClosed();
-
-//            this.MainGui.SwitchGuiToGame();
-
-//                KlondikeDeal.RemoveSavedGame();
-
-            this.Play( false, seed);
+            this.Play(false, seed);
         }
 
         private void Play(bool tutorial, int seed)
         {
             Game game = new Game(seed);
-
-           
             this.IsUiWindowOpened = true;
             this.isGamePaused = false;
-            this.gameSet.InitTiles();
-//            this.MainGui.GameGui.SetButtonsEnabled(false);
             this.GameChosen(game);
         }
 

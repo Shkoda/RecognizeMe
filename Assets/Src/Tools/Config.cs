@@ -1,4 +1,5 @@
 //#define GLOBAL_SERVER
+
 namespace GlobalPlay.Solitaire.Configuration
 {
     // ReSharper disable FieldCanBeMadeReadOnly.Global

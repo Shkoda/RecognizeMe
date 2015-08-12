@@ -9,7 +9,7 @@
             this.Height = height;
             this.Offset = offset;
         }
-        
+
         public float Height { get; private set; }
 
         public float Offset { get; private set; }

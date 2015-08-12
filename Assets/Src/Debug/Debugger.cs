@@ -4,10 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-
 using GlobalPlay.Threading;
 using GlobalPlay.Tools;
-
 using UnityEngine;
 
 public partial class Debugger : MonoBehaviour
@@ -28,10 +26,7 @@ public partial class Debugger : MonoBehaviour
 
     public static bool InterceptDebugMessages
     {
-        get
-        {
-            return interceptDebugMessages;
-        }
+        get { return interceptDebugMessages; }
 
         set
         {
@@ -94,7 +89,7 @@ public partial class Debugger : MonoBehaviour
 
         WriteToDebugger = true;
 
-        SetFilter((DebugType)0x7FFFFFFF);
+        SetFilter((DebugType) 0x7FFFFFFF);
     }
 
     #region Updates, GUI
@@ -106,8 +101,8 @@ public partial class Debugger : MonoBehaviour
 
         this.windowRect = new Rect(0, 0, Screen.width, 0);
 
-        this.ButtonHeight = Screen.height * 0.04f;
-        this.ButtonWidth = this.ButtonHeight * 3;
+        this.ButtonHeight = Screen.height*0.04f;
+        this.ButtonWidth = this.ButtonHeight*3;
 
         this.buttonYPosition = Screen.height - this.ButtonHeight;
 
@@ -120,9 +115,9 @@ public partial class Debugger : MonoBehaviour
             foreach (CrashReport crashReport in reports)
             {
                 Log(
-                    string.Format("Crash report from {0}:\n{1}", crashReport.time, crashReport.text), 
-                    DebugType.Exception, 
-                    sendToServer: true, 
+                    string.Format("Crash report from {0}:\n{1}", crashReport.time, crashReport.text),
+                    DebugType.Exception,
+                    sendToServer: true,
                     writeToUnityConsole: true);
                 crashReport.Remove();
             }
@@ -138,7 +133,7 @@ public partial class Debugger : MonoBehaviour
     {
         this.UpdateConsole();
 #if UNITY_FLASH
-    
+
     // No touchscreen at all
         if (isDragging && Input.GetMouseButtonUp(0))        {
 
@@ -165,12 +160,12 @@ public partial class Debugger : MonoBehaviour
         {
             // mouse
             this.isDragging = false;
-            if (Input.mousePosition.y > Screen.height * 0.1 && Input.mousePosition.y < Screen.height * 0.94)
+            if (Input.mousePosition.y > Screen.height*0.1 && Input.mousePosition.y < Screen.height*0.94)
             {
                 this.isFixed = true;
                 this.isMaximized = false;
             }
-            else if (Input.mousePosition.y > Screen.height * 0.1)
+            else if (Input.mousePosition.y > Screen.height*0.1)
             {
                 this.isMaximizing = true;
             }
@@ -185,12 +180,12 @@ public partial class Debugger : MonoBehaviour
             // touchscreen
             Touch touch = Input.GetTouch(0);
             this.isDragging = false;
-            if (touch.position.y > Screen.height * 0.1 && touch.position.x < Screen.height * 0.9)
+            if (touch.position.y > Screen.height*0.1 && touch.position.x < Screen.height*0.9)
             {
                 this.isFixed = true;
                 this.isMaximized = false;
             }
-            else if (touch.position.y > Screen.height * 0.1)
+            else if (touch.position.y > Screen.height*0.1)
             {
                 this.isMaximizing = true;
             }
@@ -301,7 +296,7 @@ public partial class Debugger : MonoBehaviour
             this.buttonStyle.fontSize = fontSize;
             this.textStyle.fontSize = fontSize;
 
-            textHeight = this.textStyle.fontSize == 0 ? 25f : this.textStyle.fontSize * 1.5f;
+            textHeight = this.textStyle.fontSize == 0 ? 25f : this.textStyle.fontSize*1.5f;
             textHeightWithMargin = textHeight + Margin;
 
             this.textStyle.alignment = TextAnchor.MiddleLeft;
@@ -310,11 +305,11 @@ public partial class Debugger : MonoBehaviour
         if (
             GUI.RepeatButton(
                 new Rect(
-                    Screen.width * 0.5f - this.ButtonWidth * 0.5f, 
-                    this.buttonYPosition + 2 * Margin, 
-                    this.ButtonWidth, 
-                    this.ButtonHeight), 
-                new GUIContent(this.ButtonText), 
+                    Screen.width*0.5f - this.ButtonWidth*0.5f,
+                    this.buttonYPosition + 2*Margin,
+                    this.ButtonWidth,
+                    this.ButtonHeight),
+                new GUIContent(this.ButtonText),
                 this.buttonStyle))
         {
             if (!this.isDragging)
@@ -396,7 +391,7 @@ public partial class Debugger : MonoBehaviour
             var file =
                 new FileStream(
                     @"C:\Logs\Slototherapy\" + DateTime.Now.Day + "." + DateTime.Now.Month + "." + DateTime.Now.Year
-                    + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".log", 
+                    + "_" + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + ".log",
                     FileMode.Create))
         {
             using (var writer = new StreamWriter(file))
@@ -437,18 +432,18 @@ public partial class Debugger : MonoBehaviour
         // var textHeight = textStyle.fontSize == 0 ? 25f : textStyle.fontSize * 1.5f;
         const float windowHeaderHeight = 17f;
 
-        float scrollViewHeight = this.windowRect.height - Margin * 2 - windowHeaderHeight - this.ButtonHeight;
+        float scrollViewHeight = this.windowRect.height - Margin*2 - windowHeaderHeight - this.ButtonHeight;
 
         if (scrollViewHeight > 0)
         {
             this.scrollViewVector =
                 GUI.BeginScrollView(
                     new Rect(
-                        Margin * 2, 
-                        this.ButtonHeight + windowHeaderHeight + Margin, 
-                        this.windowRect.width - 6, 
-                        scrollViewHeight), 
-                    this.scrollViewVector, 
+                        Margin*2,
+                        this.ButtonHeight + windowHeaderHeight + Margin,
+                        this.windowRect.width - 6,
+                        scrollViewHeight),
+                    this.scrollViewVector,
                     new Rect(0, 0, this.windowRect.width - 22, _totalTextHeight + 100 + Margin));
 
             for (int i = 0; i < logListFiltered.Count; i++)
@@ -462,11 +457,11 @@ public partial class Debugger : MonoBehaviour
                 {
                     GUI.Box(
                         new Rect(
-                            0, 
-                            logListFiltered[i].Top + Margin, 
-                            this.windowRect.width - 21 - Margin, 
-                            logListFiltered[i].Height - Margin), 
-                        logListFiltered[i].ToString(), 
+                            0,
+                            logListFiltered[i].Top + Margin,
+                            this.windowRect.width - 21 - Margin,
+                            logListFiltered[i].Height - Margin),
+                        logListFiltered[i].ToString(),
                         this.textStyle);
                 }
             }
@@ -474,16 +469,16 @@ public partial class Debugger : MonoBehaviour
             GUI.EndScrollView();
 
             if (GUI.Button(
-                new Rect(2 * Margin, 2 * Margin, this.ButtonWidth, this.ButtonHeight), 
-                new GUIContent("clear"), 
+                new Rect(2*Margin, 2*Margin, this.ButtonWidth, this.ButtonHeight),
+                new GUIContent("clear"),
                 this.buttonStyle))
             {
                 Clear();
             }
 
             if (GUI.Button(
-                new Rect(3 * Margin + this.ButtonWidth, 2 * Margin, this.ButtonWidth, this.ButtonHeight), 
-                new GUIContent("console"), 
+                new Rect(3*Margin + this.ButtonWidth, 2*Margin, this.ButtonWidth, this.ButtonHeight),
+                new GUIContent("console"),
                 this.buttonStyle))
             {
                 this.SwitchConsoleMode();
@@ -534,9 +529,9 @@ public partial class Debugger : MonoBehaviour
         }
 
         var msg = new ConsoleMessage(
-            message, 
-            isResponse, 
-            message.Split('\n').Length * lineHeight + tableHeight, 
+            message,
+            isResponse,
+            message.Split('\n').Length*lineHeight + tableHeight,
             _totalTextHeight + Margin);
 
         if (WriteToDebugger)
@@ -605,10 +600,10 @@ public partial class Debugger : MonoBehaviour
         return;
 #endif
         var message = new WatchMessage(
-            watchId, 
-            msg, 
-            debugType, 
-            msg.Split('\n').Length * lineHeight + tableHeight, 
+            watchId,
+            msg,
+            debugType,
+            msg.Split('\n').Length*lineHeight + tableHeight,
             _totalTextHeight + Margin);
 
         // var index = logList.IndexOf(message);
@@ -628,7 +623,7 @@ public partial class Debugger : MonoBehaviour
                 lockAcquired = Monitor.TryEnter(logList);
                 if (lockAcquired)
                 {
-                    ((WatchMessage)logList[index]).UpdateMessage(msg);
+                    ((WatchMessage) logList[index]).UpdateMessage(msg);
                 }
             }
             finally
@@ -673,7 +668,7 @@ public partial class Debugger : MonoBehaviour
                     lockAcquired = Monitor.TryEnter(logListFiltered);
                     if (lockAcquired)
                     {
-                        ((WatchMessage)logListFiltered[index2]).UpdateMessage(msg);
+                        ((WatchMessage) logListFiltered[index2]).UpdateMessage(msg);
                     }
                 }
                 finally
@@ -697,10 +692,10 @@ public partial class Debugger : MonoBehaviour
     }
 
     public static void Log(
-        object message, 
-        DebugType debugType = DebugType.Main, 
-        bool writeToUnityConsole = false, 
-        bool sendToServer = false, 
+        object message,
+        DebugType debugType = DebugType.Main,
+        bool writeToUnityConsole = false,
+        bool sendToServer = false,
         string stackTrace = "")
     {
 #if NOLOG
@@ -744,10 +739,10 @@ public partial class Debugger : MonoBehaviour
         }
 
         var msg = new Message(
-            message, 
-            debugType, 
-            message.Split('\n').Length * lineHeight + tableHeight, 
-            _totalTextHeight + 2 * Margin);
+            message,
+            debugType,
+            message.Split('\n').Length*lineHeight + tableHeight,
+            _totalTextHeight + 2*Margin);
 
         if (WriteToDebugger)
         {
@@ -819,17 +814,17 @@ public partial class Debugger : MonoBehaviour
 [Flags]
 public enum DebugType
 {
-    Main = 0x01, 
+    Main = 0x01,
 
-    UnityConsole = 0x02, 
+    UnityConsole = 0x02,
 
-    Exception = 0x04, 
+    Exception = 0x04,
 
-    NetworkHandler = 0x10, 
+    NetworkHandler = 0x10,
 
-    NetworkInterface = 0x20, 
+    NetworkInterface = 0x20,
 
-    Console = 0x400, 
+    Console = 0x400,
 
-    Threading = 0x4000, 
+    Threading = 0x4000,
 }

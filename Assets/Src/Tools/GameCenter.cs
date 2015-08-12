@@ -15,7 +15,7 @@ namespace GlobalPlay.Tools
         private bool isLoggedIn = false;
 
         /// <summary>
-        /// Set it to appropriate value.
+        /// tiles it to appropriate value.
         /// </summary>
         public string leaderboardID = "com.company.game.leaderboardname";
 
@@ -98,8 +98,9 @@ namespace GlobalPlay.Tools
 
             Social.ReportProgress(achievementId, progress, (result) =>
             {
-                Debug.Log(result ? string.Format("Successfully reported achievement {0}", achievementId)
-                          : string.Format("Failed to report achievement {0}", achievementId));
+                Debug.Log(result
+                    ? string.Format("Successfully reported achievement {0}", achievementId)
+                    : string.Format("Failed to report achievement {0}", achievementId));
             });
         }
 
@@ -114,11 +115,11 @@ namespace GlobalPlay.Tools
                 return;
             }
 
-            Social.ReportScore(score, leaderboardID, success =>
-            {
-
-                Debug.Log(success ? "Reported score to leaderboard successfully" : "Failed to report score");
-            });
+            Social.ReportScore(score, leaderboardID,
+                success =>
+                {
+                    Debug.Log(success ? "Reported score to leaderboard successfully" : "Failed to report score");
+                });
         }
 
         public void ResetAchievements()
@@ -129,10 +130,11 @@ namespace GlobalPlay.Tools
                 return;
             }
 
-            GameCenterPlatform.ResetAllAchievements((resetResult) =>
-            {
-                Debug.Log(resetResult ? "Achievements have been Reset" : "Achievement reset failure.");
-            });
+            GameCenterPlatform.ResetAllAchievements(
+                (resetResult) =>
+                {
+                    Debug.Log(resetResult ? "Achievements have been Reset" : "Achievement reset failure.");
+                });
         }
 
         private void Awake()
@@ -152,8 +154,8 @@ namespace GlobalPlay.Tools
                 Debug.Log("Authenticated, checking achievements");
 
                 string userInfo = "Username: " + Social.localUser.userName +
-                    "\nUser ID: " + Social.localUser.id +
-                    "\nIsUnderage: " + Social.localUser.underage;
+                                  "\nUser ID: " + Social.localUser.id +
+                                  "\nIsUnderage: " + Social.localUser.underage;
                 Debug.Log(userInfo);
 
                 this.LoginComplete();
@@ -191,9 +193,9 @@ namespace GlobalPlay.Tools
         private void OnGUI()
         {
 #if !UNITY_IPHONE // TODO: swap
-            float d = Screen.height * .8f / 1000f;
+            float d = Screen.height*.8f/1000f;
             float h = 400;
-            if (GUI.Button(new Rect(20 * d, (h + 700) * d, 250 * d, 100 * d), "Toggle GC"))
+            if (GUI.Button(new Rect(20*d, (h + 700)*d, 250*d, 100*d), "Toggle GC"))
             {
                 active = !active;
             }
@@ -203,38 +205,39 @@ namespace GlobalPlay.Tools
                 return;
             }
 
-            if (GUI.Button(new Rect(20 * d, (h + 100) * d, 250 * d, 100 * d), "Log in"))
+            if (GUI.Button(new Rect(20*d, (h + 100)*d, 250*d, 100*d), "Log in"))
             {
                 this.LogIn();
             }
 
-            if (GUI.Button(new Rect(20 * d, (h + 200) * d, 250 * d, 100 * d), "View Leaderboard"))
+            if (GUI.Button(new Rect(20*d, (h + 200)*d, 250*d, 100*d), "View Leaderboard"))
             {
                 this.RequestLeaderboard();
             }
 
-            if (GUI.Button(new Rect(20 * d, (h + 300) * d, 250 * d, 100 * d), "View Achievements"))
+            if (GUI.Button(new Rect(20*d, (h + 300)*d, 250*d, 100*d), "View Achievements"))
             {
                 this.RequestAchievements();
             }
 
-            if (GUI.Button(new Rect(20 * d, (h + 400) * d, 250 * d, 100 * d), "Report Score"))
+            if (GUI.Button(new Rect(20*d, (h + 400)*d, 250*d, 100*d), "Report Score"))
             {
                 int highScore = 1000;
                 this.ReportScore(highScore);
             }
 
-            if (GUI.Button(new Rect(20 * d, (h + 500) * d, 250 * d, 100 * d), "Report Achievement"))
+            if (GUI.Button(new Rect(20*d, (h + 500)*d, 250*d, 100*d), "Report Achievement"))
             {
                 this.ReportAchievement("com.compnayname.demo.achievement1", 100.00);
             }
 
-            if (GUI.Button(new Rect(20 * d, (h + 600) * d, 250 * d, 100 * d), "Reset Achievements"))
+            if (GUI.Button(new Rect(20*d, (h + 600)*d, 250*d, 100*d), "Reset Achievements"))
             {
-                GameCenterPlatform.ResetAllAchievements((resetResult) =>
-                {
-                    Debug.Log(resetResult ? "Achievements have been Reset" : "Achievement reset failure.");
-                });
+                GameCenterPlatform.ResetAllAchievements(
+                    (resetResult) =>
+                    {
+                        Debug.Log(resetResult ? "Achievements have been Reset" : "Achievement reset failure.");
+                    });
             }
 #endif
         }

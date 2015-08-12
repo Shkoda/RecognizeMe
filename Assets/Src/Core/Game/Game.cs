@@ -10,7 +10,7 @@
     using Graphics = Shkoda.RecognizeMe.Core.Graphics.Graphics;
     using Random = UnityEngine.Random;
 
-    public  class Game
+    public class Game
     {
         private readonly Graphics graphics = Graphics.Instance;
         public RecognizeController Controller { get; protected set; }
@@ -28,6 +28,7 @@
 
         public void Start()
         {
+//            Debug.Log("Game.Start");
             Controller.Subscribe();
             Controller.StartGame();
             Controller.TilesInitialized += GameInitialized;

@@ -7,10 +7,9 @@ using UnityEngine;
 
 namespace Shkoda.RecognizeMe.Core
 {
-  public  class GameProperties : MonoBehaviour
-  {
-      [EditorAssigned] public int RowNumber = 8;
-      [EditorAssigned] public int ColumnNumber = 8;
-
-  }
+    public class GameProperties : MonoBehaviour
+    {
+        [EditorAssigned] public int RowNumber = 8;
+        [EditorAssigned] public int ColumnNumber = 8;
+    }
 }

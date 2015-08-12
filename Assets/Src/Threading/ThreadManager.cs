@@ -18,18 +18,12 @@
         // public static int MainThreadId;
         public static int ThreadCount
         {
-            get
-            {
-                return _threadCount;
-            }
+            get { return _threadCount; }
         }
 
         public static bool IsRunningInMainThread
         {
-            get
-            {
-                return Thread.CurrentThread.ManagedThreadId == MainThreadId;
-            }
+            get { return Thread.CurrentThread.ManagedThreadId == MainThreadId; }
         }
 
         public static int MainThreadId { get; private set; }
@@ -63,8 +57,8 @@
             {
                 Debugger.Log(
                     string.Format(
-                        "Error in ThreadManager while adding {0}. {1}. State of ThreadManager is not guaranted to represent actual information about threading anymore.", 
-                        descr, 
+                        "Error in ThreadManager while adding {0}. {1}. State of ThreadManager is not guaranted to represent actual information about threading anymore.",
+                        descr,
                         e.Message));
             }
         }
@@ -81,9 +75,9 @@
                     {
                         Debugger.Log(
                             string.Format(
-                                "Unregistering thread {0}: {1}", 
-                                currentThreadId, 
-                                _descriptions[currentThreadId]), 
+                                "Unregistering thread {0}: {1}",
+                                currentThreadId,
+                                _descriptions[currentThreadId]),
                             DebugType.Threading);
                         _descriptions.Remove(currentThreadId);
                     }
@@ -100,8 +94,8 @@
                     int currentThreadId = Thread.CurrentThread.ManagedThreadId;
                     Debugger.Log(
                         string.Format(
-                            "Unregistering (aborted) thread {0} (no description available on abort)", 
-                            currentThreadId), 
+                            "Unregistering (aborted) thread {0} (no description available on abort)",
+                            currentThreadId),
                         DebugType.Threading);
                 }
             }
@@ -109,7 +103,7 @@
             {
                 Debugger.Log(
                     string.Format(
-                        "Error in ThreadManager while removing. {0}. State of ThreadManager is not guaranted to represent actual information about threading anymore.", 
+                        "Error in ThreadManager while removing. {0}. State of ThreadManager is not guaranted to represent actual information about threading anymore.",
                         e.Message));
                 throw;
             }

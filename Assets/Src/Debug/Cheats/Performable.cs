@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public abstract class Performable 
+    public abstract class Performable
     {
         public abstract void Perform();
 

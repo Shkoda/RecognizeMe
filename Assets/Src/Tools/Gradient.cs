@@ -1,4 +1,5 @@
 // This code is writeen by an unknown authors
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,14 +8,10 @@ using UnityEngine.UI;
 [AddComponentMenu("UI/Effects/Gradient")]
 public class Gradient : BaseVertexEffect
 {
-    [SerializeField]
-    private Direction direction = Direction.Vertical;
-    [SerializeField]
-    private Color32 topColor = Color.white;
-    [SerializeField]
-    private Color32 bottomColor = Color.black;
-    [SerializeField]
-    private Color32[] horizontalColors = { Color.white, Color.black };
+    [SerializeField] private Direction direction = Direction.Vertical;
+    [SerializeField] private Color32 topColor = Color.white;
+    [SerializeField] private Color32 bottomColor = Color.black;
+    [SerializeField] private Color32[] horizontalColors = {Color.white, Color.black};
 
     public enum Direction
     {
@@ -47,10 +44,10 @@ public class Gradient : BaseVertexEffect
 
     private void CorrectA(Graphic gr, ref Color32 color)
     {
-        color = new Color32(color.r, color.g, color.b, (byte)(gr.color.a * 255));
+        color = new Color32(color.r, color.g, color.b, (byte) (gr.color.a*255));
     }
 
-    void ModifyVerticesVertical(List<UIVertex> vertexList)
+    private void ModifyVerticesVertical(List<UIVertex> vertexList)
     {
         int count = vertexList.Count;
 
@@ -81,7 +78,7 @@ public class Gradient : BaseVertexEffect
         {
             UIVertex uiVertex = vertexList[i];
 
-            float lerp = (uiVertex.position.y - bottomY) / textHeight;
+            float lerp = (uiVertex.position.y - bottomY)/textHeight;
             // float y = Mathf.Asin((lerpArg - 0.5f) * 2) / 3.1416f + 0.5f;
             //float lerp = Mathf.Clamp01(y);
             uiVertex.color = Color32.Lerp(bottomColor, topColor, lerp);
@@ -90,7 +87,7 @@ public class Gradient : BaseVertexEffect
         }
     }
 
-    void ModifyVerticesHorizontal(List<UIVertex> vertexList)
+    private void ModifyVerticesHorizontal(List<UIVertex> vertexList)
     {
         int count = vertexList.Count;
 
@@ -117,7 +114,7 @@ public class Gradient : BaseVertexEffect
 
         float textWidth = rightX - leftX;
         int numColors = horizontalColors.Length;
-        float colorSegmentWidth = textWidth / (numColors - 1);
+        float colorSegmentWidth = textWidth/(numColors - 1);
 
         for (int i = 0; i < count; i++)
         {
@@ -125,14 +122,12 @@ public class Gradient : BaseVertexEffect
 
             float localPositionX = uiVertex.position.x - leftX;
 
-            int fromColorIndex = Mathf.Clamp(Mathf.FloorToInt(localPositionX / colorSegmentWidth), 0, numColors - 1);
+            int fromColorIndex = Mathf.Clamp(Mathf.FloorToInt(localPositionX/colorSegmentWidth), 0, numColors - 1);
             int toColorIndex = Mathf.Clamp(fromColorIndex + 1, 0, numColors - 1);
 
-            uiVertex.color = Color32.Lerp(horizontalColors[fromColorIndex], horizontalColors[toColorIndex], (localPositionX % colorSegmentWidth) / colorSegmentWidth);
+            uiVertex.color = Color32.Lerp(horizontalColors[fromColorIndex], horizontalColors[toColorIndex],
+                (localPositionX%colorSegmentWidth)/colorSegmentWidth);
             vertexList[i] = uiVertex;
         }
     }
 }
-
-
-

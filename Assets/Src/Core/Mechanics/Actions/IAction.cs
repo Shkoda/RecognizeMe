@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Shkoda.RecognizeMe.Core.Graphics;
+
 namespace Shkoda.RecognizeMe.Core.Mechanics.Actions
 {
     public interface IAction

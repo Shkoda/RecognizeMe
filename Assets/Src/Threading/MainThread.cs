@@ -2,7 +2,6 @@ namespace GlobalPlay.Threading
 {
     using System;
     using System.Collections.Generic;
-
     using UnityEngine;
 
     internal class MainThreadObject
@@ -21,10 +20,7 @@ namespace GlobalPlay.Threading
 
         public float DeltaTime
         {
-            get
-            {
-                return this.deltaTime;
-            }
+            get { return this.deltaTime; }
 
             set
             {
@@ -35,15 +31,9 @@ namespace GlobalPlay.Threading
 
         public bool Once
         {
-            get
-            {
-                return this.once;
-            }
+            get { return this.once; }
 
-            set
-            {
-                this.once = value;
-            }
+            set { this.once = value; }
         }
 
         public void DecrementDeltaTime(float time)
@@ -126,15 +116,15 @@ namespace GlobalPlay.Threading
                 lock (mainThreadObjects)
                 {
                     mainThreadObjects.Add(
-                        new MainThreadObject { CallBack = callBack, Args = args, DeltaTime = deltaTime, Tag = tag });
+                        new MainThreadObject {CallBack = callBack, Args = args, DeltaTime = deltaTime, Tag = tag});
                 }
             }
         }
 
         public static void AddOnce(
-            Action<object[]> callBack, 
-            float deltaTime = 0, 
-            string tag = null, 
+            Action<object[]> callBack,
+            float deltaTime = 0,
+            string tag = null,
             params object[] args)
         {
             if (callBack == null)
@@ -150,13 +140,13 @@ namespace GlobalPlay.Threading
             {
                 mainThreadObjects.Add(
                     new MainThreadObject
-                        {
-                            CallBack = callBack, 
-                            Args = args, 
-                            Once = true, 
-                            DeltaTime = deltaTime, 
-                            Tag = tag
-                        });
+                    {
+                        CallBack = callBack,
+                        Args = args,
+                        Once = true,
+                        DeltaTime = deltaTime,
+                        Tag = tag
+                    });
             }
 
             // }
@@ -179,13 +169,13 @@ namespace GlobalPlay.Threading
             {
                 mainThreadObjects.Add(
                     new MainThreadObject
-                        {
-                            CallBack = wrappedCallback, 
-                            Args = null, 
-                            Once = true, 
-                            DeltaTime = deltaTime, 
-                            Tag = tag
-                        });
+                    {
+                        CallBack = wrappedCallback,
+                        Args = null,
+                        Once = true,
+                        DeltaTime = deltaTime,
+                        Tag = tag
+                    });
             }
 
             // }

@@ -1,9 +1,7 @@
 ﻿namespace GlobalPlay.Tools
 {
     using System;
-
     using UnityEngine;
-
     using Random = UnityEngine.Random;
 
     public class ExplosionStyleMover : MonoBehaviour
@@ -36,9 +34,10 @@
             actualRadius = Radius + Random.Range(-RadiusUniformOffset, RadiusUniformOffset);
             actualAngle = Angle + Random.Range(-AngleUniformOffset, AngleUniformOffset);
             var defaultZ = StartPoint.z;
-            centerPoint = new Vector3(StartPoint.x + actualRadius * Mathf.Cos(actualAngle * Mathf.Deg2Rad), StartPoint.y + actualRadius * Mathf.Sin(actualAngle * Mathf.Deg2Rad), defaultZ);
+            centerPoint = new Vector3(StartPoint.x + actualRadius*Mathf.Cos(actualAngle*Mathf.Deg2Rad),
+                StartPoint.y + actualRadius*Mathf.Sin(actualAngle*Mathf.Deg2Rad), defaultZ);
 
-            var centerToEnd = (centerPoint - EndPoint) / 5;
+            var centerToEnd = (centerPoint - EndPoint)/5;
             var rightCenterToEnd = new Vector3(centerToEnd.y, -centerToEnd.x);
             var leftCenterToEnd = -rightCenterToEnd;
 
@@ -51,12 +50,16 @@
 
             LeanTween.move(
                 this.gameObject,
-                new[] { StartPoint, centerToStartHandle, startHandle, centerPoint},
-                TotalTime / 2).setEase(ExplosionCurve);
-            LeanTween.move(this.gameObject, new[] { centerPoint, endHandle, centerToEndHandle, EndPoint}, TotalTime/2).setOnComplete(OnMovingComplete).setDelay(TotalTime/2).setEase(ImplosionCurve);
+                new[] {StartPoint, centerToStartHandle, startHandle, centerPoint},
+                TotalTime/2).setEase(ExplosionCurve);
+            LeanTween.move(this.gameObject, new[] {centerPoint, endHandle, centerToEndHandle, EndPoint}, TotalTime/2)
+                .setOnComplete(OnMovingComplete)
+                .setDelay(TotalTime/2)
+                .setEase(ImplosionCurve);
         }
 
         private Vector3 prevPos;
+
         private void Update()
         {
             Debug.DrawLine(prevPos, transform.position, Color.magenta, 2);
@@ -85,13 +88,13 @@
             //secondline
             Gizmos.color = new Color(1, 1, 1);
             Gizmos.DrawLine(centerPoint, EndPoint);
-            
+
             //handles
             Gizmos.color = new Color(0, 1, 0);
             Gizmos.DrawLine(centerPoint, centerToEndHandle);
             Gizmos.DrawLine(EndPoint, endHandle);
         }
 
-        public event Action FinishedMoving = delegate {};
+        public event Action FinishedMoving = delegate { };
     }
 }

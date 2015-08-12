@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shkoda.RecognizeMe.Core.Graphics.Events
 {
-   public class StartTileSelectionEventArgs : EventArgs
+    public class StartTileSelectionEventArgs : EventArgs
     {
     }
 }

@@ -1,6 +1,4 @@
-﻿
-
-using Shkoda.RecognizeMe.Core.Game.Achievements;
+﻿using Shkoda.RecognizeMe.Core.Game.Achievements;
 
 namespace Shkoda.RecognizeMe.Core.Mechanics.Actions.Handlers
 {
@@ -8,10 +6,10 @@ namespace Shkoda.RecognizeMe.Core.Mechanics.Actions.Handlers
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-   public abstract class GameActionHandler
-    {
 
-       protected bool triggerAchievements;
+    public abstract class GameActionHandler
+    {
+        protected bool triggerAchievements;
 
         /// <summary>
         /// If seed is -1, achievements' triggers are not processed
@@ -22,8 +20,8 @@ namespace Shkoda.RecognizeMe.Core.Mechanics.Actions.Handlers
             this.triggerAchievements = (seed != -1);
         }
 
-       public virtual void HandleAction(IAction action)
-       {
+        public virtual void HandleAction(IAction action)
+        {
 //           var move = action as MoveAction;
 //           if (move != null && move.Dst.DeckClass == DeckClass.Foundation)
 //           {
@@ -36,12 +34,11 @@ namespace Shkoda.RecognizeMe.Core.Mechanics.Actions.Handlers
 //               this.Moves++;
 //               Graphics.Instance.UpdateMovesInHud(Moves);
 //           }
-       }
+        }
 
-       public  GameFinishedEventArgs CreateGameFinishedEventArgs()
-       {
-           return new GameFinishedEventArgs();
-       }
-
+        public GameFinishedEventArgs CreateGameFinishedEventArgs()
+        {
+            return new GameFinishedEventArgs();
+        }
     }
 }

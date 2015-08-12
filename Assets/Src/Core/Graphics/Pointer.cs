@@ -3,9 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.Linq;
-
     using UnityEngine;
-
     using Debug = UnityEngine.Debug;
 
     public static class Pointer
@@ -36,10 +34,7 @@
 
         public static float TimeAfterLastPointerDown
         {
-            get
-            {
-                return Time.time - pointerDownTime;
-            }
+            get { return Time.time - pointerDownTime; }
         }
 
         public static void Update()
@@ -55,10 +50,10 @@
 
         private static void AppleUpdate()
         {
-             PointerDown = false;
-             PointerUp = false;
-             Tap = false;
-             PointerDownRaw = false;
+            PointerDown = false;
+            PointerUp = false;
+            Tap = false;
+            PointerDownRaw = false;
 
             // Something is pressed
             if (Input.touchCount != 0)
@@ -66,7 +61,7 @@
                 var mainTouch = new Touch();
 
                 // There was no touches on previous frames 
-                if ( mainTouchId == -1)
+                if (mainTouchId == -1)
                 {
                     // Same as mouse button down
                     try
@@ -82,14 +77,14 @@
                             mainTouch = Input.touches.First(touch => touch.phase == TouchPhase.Began);
                         }
 
-                         mainTouchId = mainTouch.fingerId;
-                        
-                         wasPointerPressedDown = true;
-                         pointerDownPosition = mainTouch.position;
-                         pointerDownTime = Time.time;
+                        mainTouchId = mainTouch.fingerId;
 
-                         PointerDownRaw = true;
-                         PointerRayInWorldspace = Camera.main.ScreenPointToRay(mainTouch.position);
+                        wasPointerPressedDown = true;
+                        pointerDownPosition = mainTouch.position;
+                        pointerDownTime = Time.time;
+
+                        PointerDownRaw = true;
+                        PointerRayInWorldspace = Camera.main.ScreenPointToRay(mainTouch.position);
                     }
                     catch (Exception e)
                     {
@@ -102,7 +97,7 @@
                     bool found = false;
                     foreach (var touch in Input.touches)
                     {
-                        if (touch.fingerId ==  mainTouchId)
+                        if (touch.fingerId == mainTouchId)
                         {
                             mainTouch = touch;
                             found = true;
@@ -116,82 +111,86 @@
                         return;
                     }
 
-                    float slideMagnitude = ( pointerDownPosition - new Vector2(Input.mousePosition.x, Input.mousePosition.y)).magnitude;
+                    float slideMagnitude =
+                        (pointerDownPosition - new Vector2(Input.mousePosition.x, Input.mousePosition.y)).magnitude;
                     int MaxTapSlideMagnitude = Screen.dpi < 200 ? 15 : 30;
                     const float MaxTapTime = 0.3f;
-                    
+
                     // Same as mouse button up
                     if (mainTouch.phase == TouchPhase.Canceled || mainTouch.phase == TouchPhase.Ended)
                     {
-                        Debug.Log(string.Format("Touch ended. Slide mag: {0}, time: {1}", slideMagnitude,  TimeAfterLastPointerDown));
-                         PointerUp = true;
-                         wasPointerPressedDown = false;
-                         mainTouchId = -1;
+                        Debug.Log(string.Format("Touch ended. Slide mag: {0}, time: {1}", slideMagnitude,
+                            TimeAfterLastPointerDown));
+                        PointerUp = true;
+                        wasPointerPressedDown = false;
+                        mainTouchId = -1;
 
-                        if ( TimeAfterLastPointerDown <= MaxTapTime &&
+                        if (TimeAfterLastPointerDown <= MaxTapTime &&
                             slideMagnitude < MaxTapSlideMagnitude)
                         {
-                             Tap = true;
+                            Tap = true;
                             Debug.Log("Touch tap");
                         }
                     }
 
-                    if ( wasPointerPressedDown &&
-                        ( TimeAfterLastPointerDown > MaxTapTime || slideMagnitude > MaxTapSlideMagnitude))
+                    if (wasPointerPressedDown &&
+                        (TimeAfterLastPointerDown > MaxTapTime || slideMagnitude > MaxTapSlideMagnitude))
                     {
-
-                        Debug.Log(string.Format("Long select. Slide mag: {0}, time: {1}", slideMagnitude,  TimeAfterLastPointerDown));
+                        Debug.Log(string.Format("Long select. Slide mag: {0}, time: {1}", slideMagnitude,
+                            TimeAfterLastPointerDown));
                         Debug.Log("Touch select");
 
-                         PointerDown = true;
-                         wasPointerPressedDown = false;
+                        PointerDown = true;
+                        wasPointerPressedDown = false;
                     }
 
-                     PointerRayInWorldspace = Camera.main.ScreenPointToRay(mainTouch.position);
+                    PointerRayInWorldspace = Camera.main.ScreenPointToRay(mainTouch.position);
                 }
             }
         }
 
         private static void EditorUpdate()
         {
-             PointerDown = false;
-             PointerUp = false;
-             Tap = false;
-             PointerDownRaw = false;
+            PointerDown = false;
+            PointerUp = false;
+            Tap = false;
+            PointerDownRaw = false;
 
-             IsDown = Input.GetMouseButton(0);
+            IsDown = Input.GetMouseButton(0);
 
             if (Input.GetMouseButtonDown(0))
             {
-                 wasPointerPressedDown = true;
-                 pointerDownPosition = Input.mousePosition;
-                 pointerDownTime = Time.time;
-                 PointerDownRaw = true;
+                wasPointerPressedDown = true;
+                pointerDownPosition = Input.mousePosition;
+                pointerDownTime = Time.time;
+                PointerDownRaw = true;
             }
 
-            float slideMagnitude = ( pointerDownPosition - new Vector2(Input.mousePosition.x, Input.mousePosition.y)).magnitude;
+            float slideMagnitude =
+                (pointerDownPosition - new Vector2(Input.mousePosition.x, Input.mousePosition.y)).magnitude;
             const int MaxTapSlideMagnitude = 10;
             const float MaxTapTime = 0.3f;
-            
+
             if (Input.GetMouseButtonUp(0))
             {
-                 PointerUp = true;
-                 wasPointerPressedDown = false;
+                PointerUp = true;
+                wasPointerPressedDown = false;
 
-                if ( TimeAfterLastPointerDown <= MaxTapTime &&
+                if (TimeAfterLastPointerDown <= MaxTapTime &&
                     slideMagnitude < MaxTapSlideMagnitude)
                 {
-                     Tap = true;
+                    Tap = true;
                 }
             }
 
-            if ( wasPointerPressedDown && ( TimeAfterLastPointerDown > MaxTapTime || slideMagnitude > MaxTapSlideMagnitude))
+            if (wasPointerPressedDown &&
+                (TimeAfterLastPointerDown > MaxTapTime || slideMagnitude > MaxTapSlideMagnitude))
             {
-                 PointerDown = true;
-                 wasPointerPressedDown = false;
+                PointerDown = true;
+                wasPointerPressedDown = false;
             }
 
-             PointerRayInWorldspace = Camera.main.ScreenPointToRay(Input.mousePosition);
+            PointerRayInWorldspace = Camera.main.ScreenPointToRay(Input.mousePosition);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         private Quaternion defaultRotation;
         private Vector3 rightHandVector;
         private float rotStrength;
-        private bool isFlipped;
+
         public TileValue TileValue { get; private set; }
 
         public Tile()
@@ -36,9 +36,9 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public void SetTileValue(TileValue value)
         {
-            Rect uvForCard = TileFace.GetUvForCard(value);
+            Rect uvForTile = TileFace.GetUvForTile(value);
             var uvChanger = GetComponent<UvChanger>();
-            uvChanger.ChangeUv(uvForCard, true);
+            uvChanger.ChangeUv(uvForTile);
             this.TileValue = value;
         }
 
@@ -53,9 +53,9 @@ namespace Shkoda.RecognizeMe.Core.Graphics
             const float MidPointElevation = 0.2f;
 
             var target = dest.GetPositionFor(this);
-            var targetAngle = this.currentRotation * dest.GetRotationFor(this);
+            var targetAngle = this.currentRotation*dest.GetRotationFor(this);
             var source = this.transform.position;
-            var midPoint = source + (target - source) / 2;
+            var midPoint = source + (target - source)/2;
             midPoint.y += MidPointElevation;
 
             if (cancelOtherAnimations)
@@ -67,8 +67,10 @@ namespace Shkoda.RecognizeMe.Core.Graphics
             {
                 LeanTween.moveX(this.gameObject, target.x, Time).setEase(LeanTweenType.easeOutExpo).setDelay(delay);
                 LeanTween.moveZ(this.gameObject, target.z, Time).setEase(LeanTweenType.easeOutExpo).setDelay(delay);
-                LeanTween.moveY(this.gameObject, this.transform.position.y + 0.2f, Time / 7f).setDelay(delay);
-                LeanTween.moveY(this.gameObject, target.y, 6 * Time / 7f).setEase(LeanTweenType.easeOutExpo).setDelay(delay + Time / 7f);
+                LeanTween.moveY(this.gameObject, this.transform.position.y + 0.2f, Time/7f).setDelay(delay);
+                LeanTween.moveY(this.gameObject, target.y, 6*Time/7f)
+                    .setEase(LeanTweenType.easeOutExpo)
+                    .setDelay(delay + Time/7f);
             }
             else
             {
@@ -82,21 +84,23 @@ namespace Shkoda.RecognizeMe.Core.Graphics
             this.MovedToDeck(this, dest.CellId);
             this.defaultPosition = target;
         }
+
         public event Action<Tile, CellId> MovedToDeck = delegate { };
-        public void InitAsFlipped()
+
+        public void Init()
         {
 //            Rect uvForTile = TileFace.GetUvForBack();
-            Rect uvForTile = TileFace.GetUvForBack();
+//            Rect uvForTile = TileFace.GetUvForBack();
+            Rect uvForTile = TileFace.GetUvForTile(TileValue);
             var uvChanger = this.GetComponent<UvChanger>();
-            uvChanger.ChangeUv(uvForTile, false);
-            this.currentRotation = defaultFlippedRotation;
-            this.ResetRotation();
-            this.isFlipped = true;
+            uvChanger.ChangeUv(uvForTile);
+//            this.currentRotation = defaultFlippedRotation;
+//            this.ResetRotation();
         }
+
         private void ResetRotation()
         {
             this.transform.rotation = this.currentRotation;
         }
-
     }
 }

@@ -9,10 +9,7 @@
 
         public List<T> List
         {
-            get
-            {
-                return list;
-            }
+            get { return list; }
         }
 
         public ListWrapper(List<T> list)

@@ -12,21 +12,24 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         [EditorAssigned] public int TileRowsPerVertical;
         [EditorAssigned] public Texture2D TileSheet;
         [EditorAssigned] public Rect TileSpaceInSheet;
-        private static Rect backsCoordinates;
-        public static Rect GetUvForCard(TileValue value)
+
+        public static Rect GetUvForTile(TileValue value)
         {
+//            Debug.Log(string.Format("uv for {0} is {1}", value, tilesCoordinates[value]));
             return tilesCoordinates[value];
         }
 
-        public static Rect GetUvForBack()
-        {
-            return backsCoordinates;
-        }
 
         private void Awake()
         {
             var tileSheetHeight = TileSheet.height;
             var tileSheetWidth = TileSheet.width;
+
+            if (TileSpaceInSheet.width < 0.1 || TileSpaceInSheet.height < 0.1)
+            {
+                TileSpaceInSheet.width = TileSheet.width;
+                TileSpaceInSheet.height = TileSheet.height;
+            }
 
             // Coordinates in [0-1]
             var uvCardsSpace = new Rect(
@@ -45,8 +48,8 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                 var row = letterNumber/TileColumnsPerHorizontal;
                 var column = letterNumber - row*TileColumnsPerHorizontal;
 
-                var tileValue = new TileValue((char) ('A' + letterNumber));
 
+                var tileValue = new TileValue((char) ('A' + letterNumber));
 
                 var verticalOffset = row*oneCardHeight;
                 var horizontalOffset = column*oneColumnWidth;
@@ -55,7 +58,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                 var uvRect = new Rect(horizontalOffset, verticalOffset, oneCardWidth, oneCardHeight);
                 tilesCoordinates.Add(tileValue, uvRect);
 
-                // Debug.Log(string.Format("Uv for {0} is {1}", cardValue, uvRect));
+//                 Debug.Log(string.Format("Uv for {0} is {1} in row={2} column={3}", tileValue, uvRect, row, column));
             }
         }
     }

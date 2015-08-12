@@ -16,8 +16,7 @@ namespace GlobalPlay.Tools
         /// </summary>
         public Dictionary<string, string> Strings { get; private set; }
 
-        [EditorAssigned]
-        public TextAsset[] xmlFiles;
+        [EditorAssigned] public TextAsset[] xmlFiles;
 
         public static Localizer Instance { get; private set; }
 
@@ -42,7 +41,7 @@ namespace GlobalPlay.Tools
         }
 
         [UsedImplicitly]
-        void Awake()
+        private void Awake()
         {
             Instance = this;
             this.Strings = new Dictionary<string, string>();

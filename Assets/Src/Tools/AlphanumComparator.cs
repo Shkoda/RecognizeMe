@@ -28,7 +28,7 @@
  *
  */
 
- /* 
+/* 
  * Please compare against the latest Java version at http://www.DaveKoelle.com
  * to see the most recent modifications 
  */
@@ -43,7 +43,7 @@ namespace AlphanumComparator
     {
         private enum ChunkType
         {
-            Alphanumeric, 
+            Alphanumeric,
 
             Numeric
         };
