@@ -23,7 +23,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         private GameSet gameSet;
         private bool shouldStartTutorial;
-        private bool isGamePaused;
+        private bool isGamePaused = false;
 
         public event Action<Game> GameChosen = delegate { };
         public event Action GameClosed = delegate { };
@@ -69,6 +69,11 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         // Update is called once per frame
         private void Update()
         {
+            Pointer.Update();
+            if (!isGamePaused)
+            {
+                gameSet.ProcessPointerEvents();
+            }
         }
 
         public void StartGame()

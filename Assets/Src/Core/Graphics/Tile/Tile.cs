@@ -23,6 +23,14 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public TileValue TileValue { get; private set; }
 
+        private Color defaultColor, highlightedColor;
+
+        public void Start()
+        {
+            defaultColor = this.gameObject.GetComponent<Renderer>().material.color;
+            highlightedColor = Color.red;
+        }
+
         public Tile()
         {
             id = System.Guid.NewGuid();
@@ -45,6 +53,21 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         public void FlyTo(Cell dest, float delay)
         {
             this.FlyTo(dest, delay, true);
+        }
+
+        
+        public void ToggleHighlight(bool turnOn)
+        {
+            var material = this.gameObject.GetComponent<Renderer>().material;
+            if (turnOn)
+            {
+                Debug.Log(String.Format("Highlight on {0}", this));
+                material.color = highlightedColor;
+            }
+            else
+            {
+                material.color = defaultColor;
+            }
         }
 
         private void FlyTo(Cell dest, float delay, bool cancelOtherAnimations, bool allowRise = true)

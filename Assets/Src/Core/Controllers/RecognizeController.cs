@@ -80,10 +80,12 @@ namespace Shkoda.Rec.Core.Controllers
 
         protected virtual void OnTileSelectionStarted(object obj, StartTileSelectionEventArgs args)
         {
+            args.Tile.ToggleHighlight(true);
         }
 
         protected virtual void OnTileSelectionUpdated(object obj, UpdateTileSelectionEventArgs args)
         {
+            args.Tile.ToggleHighlight(true);
         }
 
         protected virtual void OnTileSelectionFinished(object obj, FinishTileSelectionEventArgs args)

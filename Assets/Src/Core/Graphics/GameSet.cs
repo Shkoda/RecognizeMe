@@ -15,16 +15,28 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 {
     public class GameSet : MonoBehaviour
     {
+        public bool NoModeEnabled { get; private set; }
+
+        /// <summary>
+        /// Is set to true when cards were moved between decks on last frame
+        /// </summary>
+        private bool cardsMovedDirtyFlag;
+
+        public bool IsSelectingTiles { get; private set; }
+
+        #region fields
+
         public event EventHandler<StartTileSelectionEventArgs> TileSelectionStarted = delegate { };
         public event EventHandler<UpdateTileSelectionEventArgs> TileSelectionUpdated = delegate { };
         public event EventHandler<FinishTileSelectionEventArgs> TileSelectionFinished = delegate { };
 
         [EditorAssigned] public SimpleCellFieldGenerator CellGenerator;
         [EditorAssigned] public TileGenerator TileGenerator;
-        private List<Tile> allTiles;
 
-//        private List<Cell> allCells;
+        private List<Tile> allTiles;
         private Dictionary<CellId, Cell> allCells;
+
+        #endregion
 
         public IEnumerator Init()
         {
@@ -39,17 +51,12 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                     .Select(o => o.GetComponent<Cell>())
                     .Where(cell => cell != null)
                     .ToDictionary(cell => cell.CellId, cell => cell);
-
-//            Debug.Log("GameSet.Init() is done");
         }
 
         public void InitTiles(List<TileModel> tileModels)
         {
-//            Debug.Log("GameSte.initTiles()");
-            var generatedTiles = TileGenerator.GeneratePhysicalTiles(tileModels, allCells);
-//            Debug.Log(string.Format("GameSte.initTiles() -- generated tiles :: {0}", generatedTiles.AsString()));
+            TileGenerator.GeneratePhysicalTiles(tileModels, allCells);
 
-            //collect all new decks and all new tiles 
             this.allTiles =
                 GameObject.FindGameObjectsWithTag("Tile")
                     .Select(o => o.GetComponent<Tile>())
@@ -101,6 +108,92 @@ namespace Shkoda.RecognizeMe.Core.Graphics
             var cell = this.CellFromId(cellId);
 //            Debug.Log("GameSet.SetTileValue() " + cell);
             cell.Tile.SetTileValue(tileValue);
+        }
+
+        //-------------------------------------------
+
+
+        private void HandleSwipe()
+        {
+            Debug.Log("swiping pointer");
+            int distance = 100;
+            RaycastHit hit;
+            if (Physics.Raycast(Pointer.PointerRayInWorldspace,
+                out hit,
+                distance,
+                LayerMask.GetMask("Tiles")))
+            {
+                var hitTile = hit.transform.gameObject.GetComponent<Tile>();
+                var eventArgs = new UpdateTileSelectionEventArgs(hitTile);
+                try
+                {
+                    this.TileSelectionUpdated(hitTile, eventArgs);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
+            }
+        }
+
+        private void HandleReleaseAfterSwipe()
+        {
+            Debug.Log("finish selection");
+            IsSelectingTiles = false;
+            var eventArgs = new FinishTileSelectionEventArgs();
+
+            try
+            {
+                this.TileSelectionFinished(null, eventArgs);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+            }
+        }
+
+        private void HandleNewSelectionStart()
+        {
+            int distance = 100;
+            RaycastHit hit;
+            if (Physics.Raycast(Pointer.PointerRayInWorldspace,
+                out hit,
+                distance,
+                LayerMask.GetMask("Tiles")))
+            {
+                //start selection
+                Debug.Log("start selection");
+                var hitTile = hit.transform.gameObject.GetComponent<Tile>();
+                IsSelectingTiles = true;
+                var eventArgs = new StartTileSelectionEventArgs(hitTile);
+                try
+                {
+                    this.TileSelectionStarted(hitTile, eventArgs);
+                    //  
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
+            }
+        }
+
+
+        public void ProcessPointerEvents()
+        {
+            // Player selected something on screen
+            if (IsSelectingTiles && Pointer.IsDown)
+            {
+                HandleSwipe();
+            }
+            else if (!IsSelectingTiles && Pointer.IsDown)
+            {
+                HandleNewSelectionStart();
+            }
+            else if (IsSelectingTiles && !Pointer.IsDown)
+            {
+                HandleReleaseAfterSwipe();
+            }
         }
     }
 }
