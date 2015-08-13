@@ -46,7 +46,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         public void InitTiles(List<TileModel> tileModels)
         {
 //            Debug.Log("GameSte.initTiles()");
-            var generatedTiles = TileGenerator.GenerateTiles(tileModels, allCells);
+            var generatedTiles = TileGenerator.GeneratePhysicalTiles(tileModels, allCells);
 //            Debug.Log(string.Format("GameSte.initTiles() -- generated tiles :: {0}", generatedTiles.AsString()));
 
             //collect all new decks and all new tiles 

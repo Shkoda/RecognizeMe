@@ -108,7 +108,7 @@ namespace Shkoda.Rec.Core.Controllers
 
             Graphics.InitTiles(Mechanics.Tiles);
 
-            var dealedTilesNumber = DealTiles();
+            var dealedTilesNumber = VisualDealTiles();
             float duration = 0.03f;
             yield return new WaitForSeconds(dealedTilesNumber*duration);
 
@@ -116,7 +116,7 @@ namespace Shkoda.Rec.Core.Controllers
         }
 
 
-        protected int DealTiles()
+        protected int VisualDealTiles()
         {
             float duration = 0.03f;
             var delay = 0;
@@ -138,7 +138,7 @@ namespace Shkoda.Rec.Core.Controllers
         }
 
 
-        protected void DealTile(CellModel cell, float animationDuration, float delayBeforeFirstAnimation)
+        protected void DealTile(CellModel cell,  float animationDuration, float delayBeforeFirstAnimation)
         {
 //            Debug.Log(string.Format("try to deal to cell {0}", cell));
 
