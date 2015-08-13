@@ -70,34 +70,6 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         }
 
 
-        public void MoveTopCard(CellId source, CellId dest, float delay)
-        {
-            var sourceCell = this.CellFromId(source);
-            if (sourceCell == null)
-            {
-                Debug.Log("all cells :: " + allCells.Keys.ToList().AsString());
-                Debug.LogError(String.Format("Cell {0} not found", source));
-            }
-
-            var tile = sourceCell.PopTile();
-            this.FlyCardTo(CellFromId(dest), delay, tile);
-        }
-
-        private float FlyCardTo(Cell dest, float delay, Tile tile)
-        {
-            dest.PushTile(tile);
-            float time = 0;
-
-
-            tile.FlyTo(dest, delay);
-            time = delay + .7f;
-
-
-//           this.OnCardsMovedBetweenDecks();
-            return time;
-        }
-
-
         public Cell CellFromId(CellId id)
         {
             return this.allCells[id];
@@ -106,12 +78,8 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         public void SetTileValue(CellId cellId, TileValue tileValue)
         {
             var cell = this.CellFromId(cellId);
-//            Debug.Log("GameSet.SetTileValue() " + cell);
             cell.Tile.SetTileValue(tileValue);
         }
-
-        //-------------------------------------------
-
 
         private void HandleSwipe()
         {
@@ -169,7 +137,6 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                 try
                 {
                     this.TileSelectionStarted(hitTile, eventArgs);
-                    //  
                 }
                 catch (Exception exception)
                 {

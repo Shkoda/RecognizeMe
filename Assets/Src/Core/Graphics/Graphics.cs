@@ -110,12 +110,6 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 //            }
         }
 
-
-        public void MoveTopCard(CellId source, CellId dest, float delay = 0f)
-        {
-            this.gameSet.MoveTopCard(source, dest, delay);
-        }
-
         public void SetTileValue(CellId cellId, TileValue tileValue)
         {
             this.gameSet.SetTileValue(cellId, tileValue);
