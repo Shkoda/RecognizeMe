@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Src.Core.Game.Tile;
 using Shkoda.RecognizeMe.Core;
 using Shkoda.RecognizeMe.Core.Game.Achievements;
@@ -26,6 +27,8 @@ namespace Shkoda.Rec.Core.Controllers
         public event Action TilesInitialized = delegate { };
 
         private TileGenerator tileGenerator = new TileGenerator(); //todo make edaitor assigned?
+
+        private List<Tile> HighlightedTiles = new List<Tile>();
 
         public Mechanics Mechanics
         {
@@ -55,9 +58,10 @@ namespace Shkoda.Rec.Core.Controllers
 
         public void StartGame()
         {
-//            Debug.Log("RecognizeController.StrartGame()");
             AppController.StartRoutine(StartGameRoutine(false));
         }
+
+        #region subscription
 
         public void Subscribe()
         {
@@ -73,6 +77,8 @@ namespace Shkoda.Rec.Core.Controllers
             Graphics.TileSelectionFinished -= OnTileSelectionFinished;
         }
 
+        #endregion
+
         public void FinishGame()
         {
             GameFinished(ActionsHandler.CreateGameFinishedEventArgs());
@@ -80,17 +86,31 @@ namespace Shkoda.Rec.Core.Controllers
 
         protected virtual void OnTileSelectionStarted(object obj, StartTileSelectionEventArgs args)
         {
+            HighlightedTiles.Add(args.Tile);
             args.Tile.ToggleHighlight(true);
         }
 
         protected virtual void OnTileSelectionUpdated(object obj, UpdateTileSelectionEventArgs args)
         {
-            args.Tile.ToggleHighlight(true);
+            if (!IsAlreadyHighlighted(args.Tile))
+            {
+                HighlightedTiles.Add(args.Tile);
+                args.Tile.ToggleHighlight(true);
+            }
+         
+        }
+
+        private bool IsAlreadyHighlighted(Tile tile)
+        {
+            return HighlightedTiles.Any(highlighted => highlighted.Id.Equals(tile.Id));
         }
 
         protected virtual void OnTileSelectionFinished(object obj, FinishTileSelectionEventArgs args)
         {
+            HighlightedTiles.ForEach(tile=>tile.ToggleHighlight(false));
+            HighlightedTiles.Clear();
         }
+
 
         protected IEnumerator StartGameRoutine(bool isTutorial)
         {
@@ -140,7 +160,7 @@ namespace Shkoda.Rec.Core.Controllers
         }
 
 
-        protected void DealTile(CellModel cell,  float animationDuration, float delayBeforeFirstAnimation)
+        protected void DealTile(CellModel cell, float animationDuration, float delayBeforeFirstAnimation)
         {
 //            Debug.Log(string.Format("try to deal to cell {0}", cell));
 

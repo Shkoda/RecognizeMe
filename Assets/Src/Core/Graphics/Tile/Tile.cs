@@ -27,6 +27,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public void Start()
         {
+           id = Guid.NewGuid();
             defaultColor = this.gameObject.GetComponent<Renderer>().material.color;
             highlightedColor = Color.red;
         }
