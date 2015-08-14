@@ -1,7 +1,6 @@
 ﻿#region imports
 
 using System;
-using Assets.Src.Core.Game.Cell;
 using UnityEngine;
 
 #endregion
@@ -39,6 +38,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
             highlightedColor = Color.red;
         }
 
+
         public void MoveInstantlyTo(Vector3 position, Quaternion rotation)
         {
             transform.position = position;
@@ -47,16 +47,13 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public void SetTileValue(TileValue value)
         {
-            var uvForTile = TileFace.GetUvForTile(value);
-            var uvChanger = GetComponent<UvChanger>();
-            uvChanger.ChangeUv(uvForTile);
             TileValue = value;
+            //find matching texture part for tile visualization
+            var uvForTile = TileFace.GetUvForTile(value.Char);
+            var uvChanger = GetComponent<UvChanger>();
+            uvChanger.ChangeUv(uvForTile);         
         }
 
-        public void FlyTo(Cell dest, float delay)
-        {
-            FlyTo(dest, delay, true);
-        }
 
         public void ToggleHighlight(bool turnOn)
         {
@@ -72,60 +69,11 @@ namespace Shkoda.RecognizeMe.Core.Graphics
             }
         }
 
-        private void FlyTo(Cell dest, float delay, bool cancelOtherAnimations, bool allowRise = true)
+
+        public void Kill()
         {
-            const float Time = 0.7f;
-            const float MidPointElevation = 0.2f;
-
-            var target = dest.GetPositionFor(this);
-            var targetAngle = currentRotation*dest.GetRotationFor(this);
-            var source = transform.position;
-            var midPoint = source + (target - source)/2;
-            midPoint.y += MidPointElevation;
-
-            if (cancelOtherAnimations)
-            {
-                LeanTween.cancel(gameObject);
-            }
-
-            if (allowRise && transform.position.y < 0.2f)
-            {
-                LeanTween.moveX(gameObject, target.x, Time).setEase(LeanTweenType.easeOutExpo).setDelay(delay);
-                LeanTween.moveZ(gameObject, target.z, Time).setEase(LeanTweenType.easeOutExpo).setDelay(delay);
-                LeanTween.moveY(gameObject, transform.position.y + 0.2f, Time/7f).setDelay(delay);
-                LeanTween.moveY(gameObject, target.y, 6*Time/7f)
-                    .setEase(LeanTweenType.easeOutExpo)
-                    .setDelay(delay + Time/7f);
-            }
-            else
-            {
-                LeanTween.move(gameObject, target, Time).setEase(LeanTweenType.easeOutExpo).setDelay(delay);
-            }
-
-            LeanTween.rotate(gameObject, targetAngle.eulerAngles, Time)
-                .setEase(LeanTweenType.easeOutExpo)
-                .setDelay(delay);
-
-            MovedToDeck(this, dest.CellId);
-            defaultPosition = target;
-        }
-
-        public event Action<Tile, CellId> MovedToDeck = delegate { };
-
-        public void Init()
-        {
-//            Rect uvForTile = TileFace.GetUvForBack();
-//            Rect uvForTile = TileFace.GetUvForBack();
-            var uvForTile = TileFace.GetUvForTile(TileValue);
-            var uvChanger = GetComponent<UvChanger>();
-            uvChanger.ChangeUv(uvForTile);
-//            this.currentRotation = defaultFlippedRotation;
-//            this.ResetRotation();
-        }
-
-        private void ResetRotation()
-        {
-            transform.rotation = currentRotation;
+            ContainingCell.Tile = null;
+            Destroy(gameObject);
         }
     }
 }

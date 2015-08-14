@@ -58,7 +58,7 @@ namespace Assets.Src.Core.Graphics.Field
 //                    Debugger.Log(String.Format("cell [{0}, {1}] has offset [{2},{3},{4}]", row, column,
 //                        xOffset, yOffset, zOffset));
                     var cell = cellGameObject.GetComponent<Cell>();
-                    cell.CellId = new CellId(row*GameProperties.ColumnNumber + column, row, column);
+                    cell.CellId = new CellId(row, column);
                     cells.Add(cell);
                 }
             }

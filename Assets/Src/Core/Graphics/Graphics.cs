@@ -15,6 +15,8 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 {
     public class Graphics : MonoBehaviour
     {
+        #region fields & properties
+
         [EditorAssigned] public GameProperties GameProperties;
         private GameSet gameSet;
         private bool isGamePaused;
@@ -23,6 +25,10 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         public bool IsUiWindowOpened { get; set; }
         public event Action<Game.Game> GameChosen = delegate { };
         public event Action GameClosed = delegate { };
+
+        #endregion
+
+        #region Awake() Start() 
 
         [UsedImplicitly]
         private void Awake()
@@ -36,6 +42,8 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         {
             StartGame();
         }
+
+        #endregion
 
         // Update is called once per frame
         private void Update()

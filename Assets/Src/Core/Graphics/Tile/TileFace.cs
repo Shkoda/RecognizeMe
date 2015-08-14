@@ -1,5 +1,6 @@
 ﻿#region imports
 
+using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -10,16 +11,16 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 {
     public class TileFace : MonoBehaviour
     {
-        private static readonly Dictionary<TileValue, Rect> tilesCoordinates = new Dictionary<TileValue, Rect>();
+        private static readonly Dictionary<Char, Rect> tilesCoordinates = new Dictionary<Char, Rect>();
         [EditorAssigned] public int TileColumnsPerHorizontal;
         [EditorAssigned] public int TileRowsPerVertical;
         [EditorAssigned] public Texture2D TileSheet;
         [EditorAssigned] public Rect TileSpaceInSheet;
 
-        public static Rect GetUvForTile(TileValue value)
+        public static Rect GetUvForTile(Char Char)
         {
 //            Debug.Log(string.Format("uv for {0} is {1}", value, tilesCoordinates[value]));
-            return tilesCoordinates[value];
+            return tilesCoordinates[Char];
         }
 
         private void Awake()
@@ -50,8 +51,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                 var row = letterNumber/TileColumnsPerHorizontal;
                 var column = letterNumber - row*TileColumnsPerHorizontal;
 
-
-                var tileValue = new TileValue((char) ('A' + letterNumber));
+                var tileValue =(char)('A' + letterNumber);
 
                 var verticalOffset = row*oneCardHeight;
                 var horizontalOffset = column*oneColumnWidth;

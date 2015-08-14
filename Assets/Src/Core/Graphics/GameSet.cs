@@ -17,6 +17,21 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 {
     public class GameSet : MonoBehaviour
     {
+        #region fields
+
+        public event EventHandler<StartTileSelectionEventArgs> TileSelectionStarted = delegate { };
+        public event EventHandler<UpdateTileSelectionEventArgs> TileSelectionUpdated = delegate { };
+        public event EventHandler<FinishTileSelectionEventArgs> TileSelectionFinished = delegate { };
+
+        [EditorAssigned]
+        public SimpleCellFieldGenerator CellGenerator;
+        [EditorAssigned]
+        public TileGenerator TileGenerator;
+
+        private List<Tile> allTiles;
+        private Dictionary<CellId, Cell> allCells;
+
+        public Cell[][] Field { get; private set; }
         /// <summary>
         /// Is set to true when cards were moved between decks on last frame
         /// </summary>
@@ -24,6 +39,9 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public bool NoModeEnabled { get; private set; }
         public bool IsSelectingTiles { get; private set; }
+        #endregion
+
+
 
         public IEnumerator Init()
         {
@@ -38,6 +56,20 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                     .Select(o => o.GetComponent<Cell>())
                     .Where(cell => cell != null)
                     .ToDictionary(cell => cell.CellId, cell => cell);
+            var rowNumber = Graphics.Instance.GameProperties.RowNumber;
+            var columnNumber = Graphics.Instance.GameProperties.ColumnNumber;
+
+            Field = new Cell[rowNumber][];
+
+            for (int row = 0; row < rowNumber; row++)
+            {
+                Field[row] = new Cell[columnNumber];
+                for (int column = 0; column < columnNumber; column++)
+                {
+                    var cell = allCells[new CellId(row, column)];
+                    Field[row][column] = cell;
+                }
+            }
         }
 
         public void InitTiles(List<TileModel> tileModels)
@@ -49,11 +81,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                     .Select(o => o.GetComponent<Tile>())
                     .Where(tile => tile != null)
                     .ToList();
-
-            foreach (var tile in allTiles)
-            {
-                tile.Init();
-            }
+  
         }
 
         public Cell CellFromId(CellId id)
@@ -148,18 +176,6 @@ namespace Shkoda.RecognizeMe.Core.Graphics
             }
         }
 
-        #region fields
 
-        public event EventHandler<StartTileSelectionEventArgs> TileSelectionStarted = delegate { };
-        public event EventHandler<UpdateTileSelectionEventArgs> TileSelectionUpdated = delegate { };
-        public event EventHandler<FinishTileSelectionEventArgs> TileSelectionFinished = delegate { };
-
-        [EditorAssigned] public SimpleCellFieldGenerator CellGenerator;
-        [EditorAssigned] public TileGenerator TileGenerator;
-
-        private List<Tile> allTiles;
-        private Dictionary<CellId, Cell> allCells;
-
-        #endregion
     }
 }

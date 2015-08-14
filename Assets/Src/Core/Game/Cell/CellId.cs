@@ -3,20 +3,17 @@
     public struct CellId
     {
         public readonly int Column;
-        public readonly int Number;
         public readonly int Row;
 
-        public CellId(int number, int row, int column)
+        public CellId( int row, int column)
         {
-            Number = number;
             Row = row;
             Column = column;
         }
 
         public bool Equals(CellId other)
         {
-            return Number == other.Number
-                   && Row == other.Row
+            return Row == other.Row
                    && Column == other.Column;
         }
 
@@ -32,7 +29,7 @@
 
         public override string ToString()
         {
-            return string.Format("CellId #{0} [{1} {2}]", Number, Row, Column);
+            return string.Format("CellId [{1} {2}]",  Row, Column);
         }
     }
 }

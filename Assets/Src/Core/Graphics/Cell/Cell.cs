@@ -19,6 +19,10 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         private Vector3 position;
         private Tile tile;
 //        public Guid Id { get; private set; }
+        public bool IsEmpty
+        {
+            get { return tile == null; }
+        }
 
         public Tile Tile { get; set; }
 
@@ -28,15 +32,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
             tile.MoveInstantlyTo(GetPositionFor(tile), GetRotationFor(tile));
         }
 
-        public Tile PopTile()
-        {
-            var popped = Tile;
-            popped.ContainingCell = null;
-            Tile = null;
-            UpdateColliderSize();
-            return popped;
-        }
-
+  
         public void PushTile(Tile tile)
         {
             this.tile = tile;

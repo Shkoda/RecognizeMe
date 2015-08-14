@@ -9,9 +9,9 @@ namespace Shkoda.RecognizeMe.Core.Game.Cell
 {
     public class CellModel
     {
-        public CellModel(int cellNumber, int row, int column)
+        public CellModel(int row, int column)
         {
-            CellId = new CellId(cellNumber, row, column);
+            CellId = new CellId( row, column);
         }
 
         public CellId CellId { get; private set; }

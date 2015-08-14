@@ -24,7 +24,7 @@ namespace Shkoda.RecognizeMe.Core.Mechanics
 
                 for (var column = 0; column < columnNumber; column++)
                 {
-                    var cell = new CellModel(columnNumber*row + column, row, column);
+                    var cell = new CellModel(row, column);
                     cells[row][column] = cell;
                 }
             }
@@ -55,5 +55,7 @@ namespace Shkoda.RecognizeMe.Core.Mechanics
         {
             throw new NotImplementedException();
         }
+
+
     }
 }
