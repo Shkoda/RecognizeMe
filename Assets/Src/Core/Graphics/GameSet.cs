@@ -69,7 +69,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         private void HandleSwipe()
         {
-            Debug.Log("swiping pointer");
+//            Debug.Log("swiping pointer");
             var distance = 100;
             RaycastHit hit;
             if (Physics.Raycast(Pointer.PointerRayInWorldspace,
@@ -92,7 +92,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         private void HandleReleaseAfterSwipe()
         {
-            Debug.Log("finish selection");
+//            Debug.Log("finish selection");
             IsSelectingTiles = false;
             var eventArgs = new FinishTileSelectionEventArgs();
 
@@ -116,7 +116,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                 LayerMask.GetMask("Tiles")))
             {
                 //start selection
-                Debug.Log("start selection");
+//                Debug.Log("start selection");
                 var hitTile = hit.transform.gameObject.GetComponent<Tile>();
                 IsSelectingTiles = true;
                 var eventArgs = new StartTileSelectionEventArgs(hitTile);

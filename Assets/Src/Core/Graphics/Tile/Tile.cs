@@ -63,7 +63,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
             var material = gameObject.GetComponent<Renderer>().material;
             if (turnOn)
             {
-                Debug.Log(string.Format("Highlight on {0}", this));
+//                Debug.Log(string.Format("Highlight on {0}", this));
                 material.color = highlightedColor;
             }
             else

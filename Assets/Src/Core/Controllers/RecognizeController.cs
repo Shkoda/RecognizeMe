@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Src.Core.Game.Lexical;
 using Shkoda.RecognizeMe.Core;
 using Shkoda.RecognizeMe.Core.Game.Achievements;
 using Shkoda.RecognizeMe.Core.Game.Cell;
@@ -21,62 +22,24 @@ namespace Shkoda.Rec.Core.Controllers
 {
     public class RecognizeController
     {
-        private readonly List<IAction> actions = new List<IAction>();
-        protected readonly Graphics Graphics;
-        private GameProperties gameProperties;
-        private List<Tile> HighlightedTiles = new List<Tile>();
-        private Mechanics mechanics = new SimpleMechanics();
-        private TileGenerator tileGenerator = new TileGenerator(); //todo make edaitor assigned?
-
-        public RecognizeController(int seed)
-        {
-            Graphics = Graphics.Instance;
-            gameProperties = Graphics.GameProperties;
-            ActionsHandler = new SimpleActionHandler(seed);
-            mechanics.Seed = seed;
-        }
-
-        public Mechanics Mechanics
-        {
-            get { return mechanics; }
-        }
-
-//        protected Mechanics Mechanics { get; private set; }
-        public GameActionHandler ActionsHandler { get; set; }
-        public event Action<GameFinishedEventArgs> GameFinished = delegate { };
-        public event Action TilesInitialized = delegate { };
-
-        /// <summary>
-        ///     Called when game is finished
-        /// </summary>
-        public void CleanUp()
-        {
-            Graphics.GatherAndClear();
-            UnSubscribe();
-        }
-
-        public void StartGame()
-        {
-            AppController.StartRoutine(StartGameRoutine(false));
-        }
-
-        public void FinishGame()
-        {
-            GameFinished(ActionsHandler.CreateGameFinishedEventArgs());
-        }
-
         protected virtual void OnTileSelectionStarted(object obj, StartTileSelectionEventArgs args)
         {
-            HighlightedTiles.Add(args.Tile);
-            args.Tile.ToggleHighlight(true);
+            var tile = args.Tile;
+            word = new Word(tile.TileValue.Char);
+            HighlightedTiles.Add(tile);
+            tile.ToggleHighlight(true);
+            Debug.Log("new word :: "+word);
         }
 
         protected virtual void OnTileSelectionUpdated(object obj, UpdateTileSelectionEventArgs args)
         {
-            if (!IsAlreadyHighlighted(args.Tile))
+            var tile = args.Tile;
+            if (!IsAlreadyHighlighted(tile))
             {
-                HighlightedTiles.Add(args.Tile);
-                args.Tile.ToggleHighlight(true);
+                HighlightedTiles.Add(tile);
+                tile.ToggleHighlight(true);
+                word += tile.TileValue.Char;
+                Debug.Log("updated word :: " + word);
             }
         }
 
@@ -157,6 +120,34 @@ namespace Shkoda.Rec.Core.Controllers
 //            throw new NotImplementedException();
         }
 
+        #region fields & properties & constructor
+
+        private readonly List<IAction> actions = new List<IAction>();
+        protected readonly Graphics Graphics;
+        private GameProperties gameProperties;
+        private List<Tile> HighlightedTiles = new List<Tile>();
+        private Mechanics mechanics = new SimpleMechanics();
+        public GameActionHandler ActionsHandler { get; set; }
+        public event Action<GameFinishedEventArgs> GameFinished = delegate { };
+        public event Action TilesInitialized = delegate { };
+
+        private Word word;
+
+        public Mechanics Mechanics
+        {
+            get { return mechanics; }
+        }
+
+        public RecognizeController(int seed)
+        {
+            Graphics = Graphics.Instance;
+            gameProperties = Graphics.GameProperties;
+            ActionsHandler = new SimpleActionHandler(seed);
+            mechanics.Seed = seed;
+        }
+
+        #endregion
+
         #region subscription
 
         public void Subscribe()
@@ -171,6 +162,29 @@ namespace Shkoda.Rec.Core.Controllers
             Graphics.TileSelectionStarted -= OnTileSelectionStarted;
             Graphics.TileSelectionUpdated -= OnTileSelectionUpdated;
             Graphics.TileSelectionFinished -= OnTileSelectionFinished;
+        }
+
+        #endregion
+
+        #region StartGame(), FinishGame(), CleanUp()
+
+        public void StartGame()
+        {
+            AppController.StartRoutine(StartGameRoutine(false));
+        }
+
+        public void FinishGame()
+        {
+            GameFinished(ActionsHandler.CreateGameFinishedEventArgs());
+        }
+
+        /// <summary>
+        ///     Called when game is finished
+        /// </summary>
+        public void CleanUp()
+        {
+            Graphics.GatherAndClear();
+            UnSubscribe();
         }
 
         #endregion
