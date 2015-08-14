@@ -1,20 +1,20 @@
-﻿namespace GlobalPlay.Threading
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Threading;
+﻿#region imports
 
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading;
+
+#endregion
+
+namespace GlobalPlay.Threading
+{
     public static class ThreadManager
     {
         private static readonly Dictionary<int, Thread> _threads = new Dictionary<int, Thread>();
-
         private static readonly Dictionary<int, string> _descriptions = new Dictionary<int, string>();
-
         private static volatile int _threadCount = 1;
-
         private static volatile bool _isAborting;
-
         // public static int MainThreadId;
         public static int ThreadCount
         {
@@ -32,7 +32,7 @@
         {
             try
             {
-                int currentThreadId = Thread.CurrentThread.ManagedThreadId;
+                var currentThreadId = Thread.CurrentThread.ManagedThreadId;
 
                 lock (_threads)
                 {
@@ -69,7 +69,7 @@
             {
                 if (!_isAborting)
                 {
-                    int currentThreadId = Thread.CurrentThread.ManagedThreadId;
+                    var currentThreadId = Thread.CurrentThread.ManagedThreadId;
 
                     lock (_descriptions)
                     {
@@ -91,7 +91,7 @@
                 }
                 else
                 {
-                    int currentThreadId = Thread.CurrentThread.ManagedThreadId;
+                    var currentThreadId = Thread.CurrentThread.ManagedThreadId;
                     Debugger.Log(
                         string.Format(
                             "Unregistering (aborted) thread {0} (no description available on abort)",
@@ -112,7 +112,7 @@
         public static void OutputRunningThreads()
         {
             var sb = new StringBuilder();
-            int count = 0;
+            var count = 0;
             lock (_descriptions)
             {
                 count = _descriptions.Count;

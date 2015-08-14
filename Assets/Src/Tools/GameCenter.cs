@@ -1,17 +1,19 @@
+#region imports
+
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SocialPlatforms;
+using UnityEngine.SocialPlatforms.GameCenter;
+
+#endregion
+
 namespace GlobalPlay.Tools
 {
-    using UnityEngine;
-    using UnityEngine.Events;
-    using UnityEngine.SocialPlatforms;
-    using UnityEngine.SocialPlatforms.GameCenter;
-
     /// <summary>
     /// Can be used on iOS only
     /// </summary>
     public sealed class GameCenter : MonoBehaviour
     {
-        private ILeaderboard m_Leaderboard;
-
         private bool isLoggedIn = false;
 
         /// <summary>
@@ -19,9 +21,9 @@ namespace GlobalPlay.Tools
         /// </summary>
         public string leaderboardID = "com.company.game.leaderboardname";
 
-        public event UnityAction LoginComplete = delegate { };
-
+        private ILeaderboard m_Leaderboard;
         public static GameCenter Instance { get; private set; }
+        public event UnityAction LoginComplete = delegate { };
 
         /// <summary>
         /// Authenticates user, the LoginComplete event will be fired upon success
@@ -41,7 +43,7 @@ namespace GlobalPlay.Tools
         /// <param name="success"></param>
         public void RequestAchievements()
         {
-            if (!this.isLoggedIn)
+            if (!isLoggedIn)
             {
                 Debug.LogWarning("Game center action requested but the user is not authenticated");
                 return;
@@ -55,7 +57,7 @@ namespace GlobalPlay.Tools
         /// </summary>
         public void RequestLeaderboard()
         {
-            if (!this.isLoggedIn)
+            if (!isLoggedIn)
             {
                 Debug.LogWarning("Game center action requested but the user is not authenticated");
                 return;
@@ -90,13 +92,13 @@ namespace GlobalPlay.Tools
         /// </summary>
         public void ReportAchievement(string achievementId, double progress)
         {
-            if (!this.isLoggedIn)
+            if (!isLoggedIn)
             {
                 Debug.LogWarning("Game center action requested but the user is not authenticated");
                 return;
             }
 
-            Social.ReportProgress(achievementId, progress, (result) =>
+            Social.ReportProgress(achievementId, progress, result =>
             {
                 Debug.Log(result
                     ? string.Format("Successfully reported achievement {0}", achievementId)
@@ -109,7 +111,7 @@ namespace GlobalPlay.Tools
         /// </summary>
         public void ReportScore(long score)
         {
-            if (!this.isLoggedIn)
+            if (!isLoggedIn)
             {
                 Debug.LogWarning("Game center action requested but the user is not authenticated");
                 return;
@@ -124,14 +126,14 @@ namespace GlobalPlay.Tools
 
         public void ResetAchievements()
         {
-            if (!this.isLoggedIn)
+            if (!isLoggedIn)
             {
                 Debug.LogWarning("Game center action requested but the user is not authenticated");
                 return;
             }
 
             GameCenterPlatform.ResetAllAchievements(
-                (resetResult) =>
+                resetResult =>
                 {
                     Debug.Log(resetResult ? "Achievements have been Reset" : "Achievement reset failure.");
                 });
@@ -153,12 +155,12 @@ namespace GlobalPlay.Tools
             {
                 Debug.Log("Authenticated, checking achievements");
 
-                string userInfo = "Username: " + Social.localUser.userName +
-                                  "\nUser ID: " + Social.localUser.id +
-                                  "\nIsUnderage: " + Social.localUser.underage;
+                var userInfo = "Username: " + Social.localUser.userName +
+                               "\nUser ID: " + Social.localUser.id +
+                               "\nIsUnderage: " + Social.localUser.underage;
                 Debug.Log(userInfo);
 
-                this.LoginComplete();
+                LoginComplete();
             }
             else
                 Debug.Log("Failed to authenticate with Game Center.");
@@ -177,7 +179,7 @@ namespace GlobalPlay.Tools
         private void OnScoresLoaded(bool result)
         {
             Debug.Log("Received " + m_Leaderboard.scores.Length + " scores");
-            foreach (IScore score in m_Leaderboard.scores)
+            foreach (var score in m_Leaderboard.scores)
             {
                 Debug.Log(score);
             }
@@ -188,12 +190,12 @@ namespace GlobalPlay.Tools
 
         #region Debug
 
-        private bool active = false;
+        private bool active;
 
         private void OnGUI()
         {
 #if !UNITY_IPHONE // TODO: swap
-            float d = Screen.height*.8f/1000f;
+            var d = Screen.height*.8f/1000f;
             float h = 400;
             if (GUI.Button(new Rect(20*d, (h + 700)*d, 250*d, 100*d), "Toggle GC"))
             {
@@ -207,34 +209,34 @@ namespace GlobalPlay.Tools
 
             if (GUI.Button(new Rect(20*d, (h + 100)*d, 250*d, 100*d), "Log in"))
             {
-                this.LogIn();
+                LogIn();
             }
 
             if (GUI.Button(new Rect(20*d, (h + 200)*d, 250*d, 100*d), "View Leaderboard"))
             {
-                this.RequestLeaderboard();
+                RequestLeaderboard();
             }
 
             if (GUI.Button(new Rect(20*d, (h + 300)*d, 250*d, 100*d), "View Achievements"))
             {
-                this.RequestAchievements();
+                RequestAchievements();
             }
 
             if (GUI.Button(new Rect(20*d, (h + 400)*d, 250*d, 100*d), "Report Score"))
             {
-                int highScore = 1000;
-                this.ReportScore(highScore);
+                var highScore = 1000;
+                ReportScore(highScore);
             }
 
             if (GUI.Button(new Rect(20*d, (h + 500)*d, 250*d, 100*d), "Report Achievement"))
             {
-                this.ReportAchievement("com.compnayname.demo.achievement1", 100.00);
+                ReportAchievement("com.compnayname.demo.achievement1", 100.00);
             }
 
             if (GUI.Button(new Rect(20*d, (h + 600)*d, 250*d, 100*d), "Reset Achievements"))
             {
                 GameCenterPlatform.ResetAllAchievements(
-                    (resetResult) =>
+                    resetResult =>
                     {
                         Debug.Log(resetResult ? "Achievements have been Reset" : "Achievement reset failure.");
                     });

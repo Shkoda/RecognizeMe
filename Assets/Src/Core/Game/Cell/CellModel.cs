@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Assets.Src.Core.Game.Tile;
+﻿#region imports
+
+using Assets.Src.Core.Game.Cell;
 using Shkoda.RecognizeMe.Core.Game.Tile;
+
+#endregion
 
 namespace Shkoda.RecognizeMe.Core.Game.Cell
 {
     public class CellModel
     {
-        public CellId CellId { get; private set; }
-        public TileModel Tile { get; set; }
-
         public CellModel(int cellNumber, int row, int column)
         {
-            this.CellId = new CellId(cellNumber, row, column);
+            CellId = new CellId(cellNumber, row, column);
         }
+
+        public CellId CellId { get; private set; }
+        public TileModel Tile { get; set; }
 
         public override string ToString()
         {
             var content = Tile == null ? "EMPTY" : Tile.TileValue.ToString();
-            return String.Format("Cell model [{0}] {1}", CellId, content);
+            return string.Format("Cell model [{0}] {1}", CellId, content);
         }
     }
 }

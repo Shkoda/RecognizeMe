@@ -1,24 +1,23 @@
-﻿using System;
+﻿#region imports
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Assets.Src.Core.Game.Tile;
+using Assets.Src.Core.Game.Cell;
 using JetBrains.Annotations;
 using Shkoda.RecognizeMe.Core;
 using Shkoda.RecognizeMe.Core.Graphics;
 using UnityEngine;
+
+#endregion
 
 namespace Assets.Src.Core.Graphics.Field
 {
     public class SimpleCellFieldGenerator : MonoBehaviour
     {
         [EditorAssigned] public GameObject CellPrefab;
-        [EditorAssigned] public GameObject ContainerObject;
-        [EditorAssigned] public GameObject TablePlane;
-
-        [EditorAssigned] public GameProperties GameProperties;
-
         private List<Cell> cells;
+        [EditorAssigned] public GameObject ContainerObject;
+        [EditorAssigned] public GameProperties GameProperties;
+        [EditorAssigned] public GameObject TablePlane;
 
         public List<Cell> Cells
         {
@@ -37,22 +36,22 @@ namespace Assets.Src.Core.Graphics.Field
             var zDefaultOffset = (fieldBounds.z - cellBounds.z*GameProperties.RowNumber)/2;
 
 
-            Debugger.Log(String.Format("bounds = {0}", cellBounds));
+            Debugger.Log(string.Format("bounds = {0}", cellBounds));
 
             // this.glowInstance = (GameObject)Instantiate(this.EyeGlowPrefab);
-            for (int row = 0; row < GameProperties.RowNumber; row++)
+            for (var row = 0; row < GameProperties.RowNumber; row++)
             {
-                for (int column = 0; column < GameProperties.ColumnNumber; column++)
+                for (var column = 0; column < GameProperties.ColumnNumber; column++)
                 {
-                    GameObject cellGameObject = (GameObject) Instantiate(this.CellPrefab);
-                    cellGameObject.name = String.Format("cell [{0}, {1}]", row, column);
+                    var cellGameObject = Instantiate(CellPrefab);
+                    cellGameObject.name = string.Format("cell [{0}, {1}]", row, column);
 
                     cellGameObject.transform.parent = ContainerObject.transform;
                     cellGameObject.transform.position = TablePlane.transform.position;
 
-                    float xOffset = (float) (cellBounds.x*column) - fieldBounds.x/2 + cellBounds.x/2 + xDefaultOffset;
-                    float yOffset = 0.0001f;
-                    float zOffset = (float) (cellBounds.z*row) - fieldBounds.z/2 + cellBounds.z/2 + zDefaultOffset;
+                    var xOffset = cellBounds.x*column - fieldBounds.x/2 + cellBounds.x/2 + xDefaultOffset;
+                    var yOffset = 0.0001f;
+                    var zOffset = cellBounds.z*row - fieldBounds.z/2 + cellBounds.z/2 + zDefaultOffset;
 
                     cellGameObject.transform.localPosition += new Vector3(xOffset, yOffset, zOffset);
 

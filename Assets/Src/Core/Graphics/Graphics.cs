@@ -1,69 +1,40 @@
-﻿using Assets.Src.Core.Game.Tile;
-using Assets.Src.Core.Graphics.Field;
+﻿#region imports
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Assets.Src.Core.Game.Cell;
+using JetBrains.Annotations;
 using Shkoda.RecognizeMe.Core.Game.Tile;
 using Shkoda.RecognizeMe.Core.Graphics.Events;
+using UnityEngine;
+
+#endregion
 
 namespace Shkoda.RecognizeMe.Core.Graphics
 {
-    using UnityEngine;
-    using System.Collections;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using JetBrains.Annotations;
-    using UnityEngine;
-    using Object = UnityEngine.Object;
-    using Shkoda.RecognizeMe.Core.Game;
-
     public class Graphics : MonoBehaviour
     {
-        public static Graphics Instance { get; private set; }
-
         [EditorAssigned] public GameProperties GameProperties;
-
         private GameSet gameSet;
+        private bool isGamePaused;
         private bool shouldStartTutorial;
-        private bool isGamePaused = false;
-
-        public event Action<Game> GameChosen = delegate { };
+        public static Graphics Instance { get; private set; }
+        public bool IsUiWindowOpened { get; set; }
+        public event Action<Game.Game> GameChosen = delegate { };
         public event Action GameClosed = delegate { };
-
-        #region Redirected events
-
-        public event EventHandler<StartTileSelectionEventArgs> TileSelectionStarted
-        {
-            add { this.gameSet.TileSelectionStarted += value; }
-
-            remove { this.gameSet.TileSelectionStarted -= value; }
-        }
-
-        public event EventHandler<UpdateTileSelectionEventArgs> TileSelectionUpdated
-        {
-            add { this.gameSet.TileSelectionUpdated += value; }
-
-            remove { this.gameSet.TileSelectionUpdated -= value; }
-        }
-
-        public event EventHandler<FinishTileSelectionEventArgs> TileSelectionFinished
-        {
-            add { this.gameSet.TileSelectionFinished += value; }
-
-            remove { this.gameSet.TileSelectionFinished -= value; }
-        }
-
-        #endregion
 
         [UsedImplicitly]
         private void Awake()
         {
             Instance = this;
-            this.gameSet = this.GetComponent<GameSet>();
+            gameSet = GetComponent<GameSet>();
         }
 
         // Use this for initialization
         private void Start()
         {
-            this.StartGame();
+            StartGame();
         }
 
         // Update is called once per frame
@@ -78,18 +49,18 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public void StartGame()
         {
-            this.StartCoroutine(this.Init());
+            StartCoroutine(Init());
         }
 
         public IEnumerator Init()
         {
 //            Debug.Log("Graphics.Init()");
-            yield return AppController.StartRoutine(this.gameSet.Init());
+            yield return AppController.StartRoutine(gameSet.Init());
         }
 
         public void InitTiles(List<TileModel> Set)
         {
-            this.gameSet.InitTiles(Set);
+            gameSet.InitTiles(Set);
         }
 
         public void UpdateTimer(long time)
@@ -112,9 +83,8 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public void SetTileValue(CellId cellId, TileValue tileValue)
         {
-            this.gameSet.SetTileValue(cellId, tileValue);
+            gameSet.SetTileValue(cellId, tileValue);
         }
-
 
         public void OnGUI()
         {
@@ -126,23 +96,46 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public void NewGame()
         {
-            this.NewGame(Game.RandomSeed());
+            NewGame(Game.Game.RandomSeed());
         }
 
         public void NewGame(int seed)
         {
-            this.shouldStartTutorial = false;
-            this.Play(false, seed);
+            shouldStartTutorial = false;
+            Play(false, seed);
         }
 
         private void Play(bool tutorial, int seed)
         {
-            Game game = new Game(seed);
-            this.IsUiWindowOpened = true;
-            this.isGamePaused = false;
-            this.GameChosen(game);
+            var game = new Game.Game(seed);
+            IsUiWindowOpened = true;
+            isGamePaused = false;
+            GameChosen(game);
         }
 
-        public bool IsUiWindowOpened { get; set; }
+        #region Redirected events
+
+        public event EventHandler<StartTileSelectionEventArgs> TileSelectionStarted
+        {
+            add { gameSet.TileSelectionStarted += value; }
+
+            remove { gameSet.TileSelectionStarted -= value; }
+        }
+
+        public event EventHandler<UpdateTileSelectionEventArgs> TileSelectionUpdated
+        {
+            add { gameSet.TileSelectionUpdated += value; }
+
+            remove { gameSet.TileSelectionUpdated -= value; }
+        }
+
+        public event EventHandler<FinishTileSelectionEventArgs> TileSelectionFinished
+        {
+            add { gameSet.TileSelectionFinished += value; }
+
+            remove { gameSet.TileSelectionFinished -= value; }
+        }
+
+        #endregion
     }
 }

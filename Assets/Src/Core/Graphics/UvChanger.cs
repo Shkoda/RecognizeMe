@@ -1,9 +1,11 @@
-﻿namespace Shkoda.RecognizeMe.Core.Graphics
-{
-    using System;
-    using JetBrains.Annotations;
-    using UnityEngine;
+﻿#region imports
 
+using UnityEngine;
+
+#endregion
+
+namespace Shkoda.RecognizeMe.Core.Graphics
+{
     public class UvChanger : MonoBehaviour
     {
         /// <summary>
@@ -14,7 +16,7 @@
         {
             var material = gameObject.GetComponent<Renderer>().material;
 
-            material.SetTextureOffset("_MainTex", new Vector2(uv.xMin, 0.8f-uv.yMin));
+            material.SetTextureOffset("_MainTex", new Vector2(uv.xMin, 0.8f - uv.yMin));
             material.SetTextureScale("_MainTex", new Vector2(0.17f, 0.2f));
         }
     }

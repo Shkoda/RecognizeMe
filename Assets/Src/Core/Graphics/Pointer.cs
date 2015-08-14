@@ -1,19 +1,19 @@
-﻿namespace Shkoda.RecognizeMe.Core.Graphics
-{
-    using System;
-    using System.Diagnostics;
-    using System.Linq;
-    using UnityEngine;
-    using Debug = UnityEngine.Debug;
+﻿#region imports
 
+using System;
+using System.Linq;
+using UnityEngine;
+
+#endregion
+
+namespace Shkoda.RecognizeMe.Core.Graphics
+{
     public static class Pointer
     {
         private static float pointerDownTime;
-
         private static Vector2 pointerDownPosition;
-
         private static bool wasPointerPressedDown;
-
+        private static int mainTouchId = -1;
         public static bool IsDown { get; private set; }
 
         /// <summary>
@@ -22,7 +22,6 @@
         public static bool PointerDown { get; private set; }
 
         public static bool PointerDownRaw { get; private set; }
-
         public static bool PointerUp { get; private set; }
 
         /// <summary>
@@ -45,8 +44,6 @@
             AppleUpdate();
 #endif
         }
-
-        private static int mainTouchId = -1;
 
         private static void AppleUpdate()
         {
@@ -94,7 +91,7 @@
                 }
                 else
                 {
-                    bool found = false;
+                    var found = false;
                     foreach (var touch in Input.touches)
                     {
                         if (touch.fingerId == mainTouchId)
@@ -111,9 +108,9 @@
                         return;
                     }
 
-                    float slideMagnitude =
+                    var slideMagnitude =
                         (pointerDownPosition - new Vector2(Input.mousePosition.x, Input.mousePosition.y)).magnitude;
-                    int MaxTapSlideMagnitude = Screen.dpi < 200 ? 15 : 30;
+                    var MaxTapSlideMagnitude = Screen.dpi < 200 ? 15 : 30;
                     const float MaxTapTime = 0.3f;
 
                     // Same as mouse button up
@@ -166,7 +163,7 @@
                 PointerDownRaw = true;
             }
 
-            float slideMagnitude =
+            var slideMagnitude =
                 (pointerDownPosition - new Vector2(Input.mousePosition.x, Input.mousePosition.y)).magnitude;
             const int MaxTapSlideMagnitude = 10;
             const float MaxTapTime = 0.3f;

@@ -1,4 +1,9 @@
-﻿
+﻿#region imports
+
+using System;
+
+#endregion
+
 #pragma warning disable 1591
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedParameter.Local
@@ -10,8 +15,6 @@
 
 namespace JetBrains.Annotations
 {
-    using System;
-
     /// <summary>
     /// Indicates that the value of the marked element could be <c>null</c> sometimes,
     /// so the check for <c>null</c> is necessary before its usage
@@ -25,7 +28,7 @@ namespace JetBrains.Annotations
     /// </code></example>
     [AttributeUsage(
         AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate
-        | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+        | AttributeTargets.Field)]
     public sealed class CanBeNullAttribute : Attribute
     {
     }
@@ -40,7 +43,7 @@ namespace JetBrains.Annotations
     /// </code></example>
     [AttributeUsage(
         AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate
-        | AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+        | AttributeTargets.Field)]
     public sealed class NotNullAttribute : Attribute
     {
     }
@@ -57,7 +60,7 @@ namespace JetBrains.Annotations
     ///   ShowError("Failed: {0}"); // Warning: Non-existing argument in format string
     /// }
     /// </code></example>
-    [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method)]
     public sealed class StringFormatMethodAttribute : Attribute
     {
         /// <param name="formatParameterName">
@@ -65,7 +68,7 @@ namespace JetBrains.Annotations
         /// </param>
         public StringFormatMethodAttribute(string formatParameterName)
         {
-            this.FormatParameterName = formatParameterName;
+            FormatParameterName = formatParameterName;
         }
 
         public string FormatParameterName { get; private set; }
@@ -82,7 +85,7 @@ namespace JetBrains.Annotations
     ///     throw new ArgumentNullException("par"); // Warning: Cannot resolve symbol
     /// }
     /// </code></example>
-    [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Parameter)]
     public sealed class InvokerParameterNameAttribute : Attribute
     {
     }
@@ -123,7 +126,7 @@ namespace JetBrains.Annotations
     /// <item><c>SetProperty(ref myField, value, "Property")</c></item>
     /// </list>
     /// </example>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method)]
     public sealed class NotifyPropertyChangedInvocatorAttribute : Attribute
     {
         public NotifyPropertyChangedInvocatorAttribute()
@@ -132,7 +135,7 @@ namespace JetBrains.Annotations
 
         public NotifyPropertyChangedInvocatorAttribute(string parameterName)
         {
-            this.ParameterName = parameterName;
+            ParameterName = parameterName;
         }
 
         public string ParameterName { get; private set; }
@@ -180,7 +183,7 @@ namespace JetBrains.Annotations
     /// public bool TryParse(string s, out Person result)
     /// </code></item>
     /// </list></examples>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public sealed class ContractAnnotationAttribute : Attribute
     {
         public ContractAnnotationAttribute([NotNull] string contract)
@@ -190,12 +193,11 @@ namespace JetBrains.Annotations
 
         public ContractAnnotationAttribute([NotNull] string contract, bool forceFullStates)
         {
-            this.Contract = contract;
-            this.ForceFullStates = forceFullStates;
+            Contract = contract;
+            ForceFullStates = forceFullStates;
         }
 
         public string Contract { get; private set; }
-
         public bool ForceFullStates { get; private set; }
     }
 
@@ -208,7 +210,7 @@ namespace JetBrains.Annotations
     ///   private string str = "my string"; // Warning: Localizable string
     /// }
     /// </code></example>
-    [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.All)]
     public sealed class LocalizationRequiredAttribute : Attribute
     {
         public LocalizationRequiredAttribute()
@@ -218,7 +220,7 @@ namespace JetBrains.Annotations
 
         public LocalizationRequiredAttribute(bool required)
         {
-            this.Required = required;
+            Required = required;
         }
 
         public bool Required { get; private set; }
@@ -243,8 +245,7 @@ namespace JetBrains.Annotations
     ///   }
     /// }
     /// </code></example>
-    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false,
-        Inherited = true)]
+    [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct)]
     public sealed class CannotApplyEqualityOperatorAttribute : Attribute
     {
     }
@@ -259,13 +260,13 @@ namespace JetBrains.Annotations
     /// [Component] // ComponentAttribute requires implementing IComponent interface
     /// public class MyComponent : IComponent { }
     /// </code></example>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     [BaseTypeRequired(typeof (Attribute))]
     public sealed class BaseTypeRequiredAttribute : Attribute
     {
         public BaseTypeRequiredAttribute([NotNull] Type baseType)
         {
-            this.BaseType = baseType;
+            BaseType = baseType;
         }
 
         [NotNull]
@@ -277,7 +278,7 @@ namespace JetBrains.Annotations
     /// (e.g. via reflection, in external library), so this symbol
     /// will not be marked as unused (as well as by other usage inspections)
     /// </summary>
-    [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.All)]
     public sealed class UsedImplicitlyAttribute : Attribute
     {
         public UsedImplicitlyAttribute()
@@ -297,12 +298,11 @@ namespace JetBrains.Annotations
 
         public UsedImplicitlyAttribute(ImplicitUseKindFlags useKindFlags, ImplicitUseTargetFlags targetFlags)
         {
-            this.UseKindFlags = useKindFlags;
-            this.TargetFlags = targetFlags;
+            UseKindFlags = useKindFlags;
+            TargetFlags = targetFlags;
         }
 
         public ImplicitUseKindFlags UseKindFlags { get; private set; }
-
         public ImplicitUseTargetFlags TargetFlags { get; private set; }
     }
 
@@ -311,7 +311,7 @@ namespace JetBrains.Annotations
     /// to not mark symbols marked with such attributes as unused
     /// (as well as by other usage inspections)
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class)]
     public sealed class MeansImplicitUseAttribute : Attribute
     {
         public MeansImplicitUseAttribute()
@@ -331,8 +331,8 @@ namespace JetBrains.Annotations
 
         public MeansImplicitUseAttribute(ImplicitUseKindFlags useKindFlags, ImplicitUseTargetFlags targetFlags)
         {
-            this.UseKindFlags = useKindFlags;
-            this.TargetFlags = targetFlags;
+            UseKindFlags = useKindFlags;
+            TargetFlags = targetFlags;
         }
 
         [UsedImplicitly]
@@ -360,7 +360,7 @@ namespace JetBrains.Annotations
         InstantiatedWithFixedConstructorSignature = 4,
 
         /// <summary>Indicates implicit instantiation of a type</summary>
-        InstantiatedNoFixedConstructorSignature = 8,
+        InstantiatedNoFixedConstructorSignature = 8
     }
 
     /// <summary>
@@ -395,7 +395,7 @@ namespace JetBrains.Annotations
 
         public PublicAPIAttribute([NotNull] string comment)
         {
-            this.Comment = comment;
+            Comment = comment;
         }
 
         [NotNull]
@@ -415,7 +415,7 @@ namespace JetBrains.Annotations
 
         public EditorAssignedAttribute([NotNull] string comment)
         {
-            this.Comment = comment;
+            Comment = comment;
         }
 
         [NotNull]
@@ -429,7 +429,7 @@ namespace JetBrains.Annotations
     /// If the parameter is an enumerable, indicates that it is enumerated
     /// while the method is executed
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Parameter)]
     public sealed class InstantHandleAttribute : Attribute
     {
     }
@@ -445,7 +445,7 @@ namespace JetBrains.Annotations
     ///   Multiply(a, b); // Waring: Return value of pure method is not used
     /// }
     /// </code></example>
-    [AttributeUsage(AttributeTargets.Method, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Method)]
     public sealed class PureAttribute : Attribute
     {
     }
@@ -464,7 +464,7 @@ namespace JetBrains.Annotations
 
         public PathReferenceAttribute([PathReference] string basePath)
         {
-            this.BasePath = basePath;
+            BasePath = basePath;
         }
 
         [NotNull]
@@ -535,7 +535,7 @@ namespace JetBrains.Annotations
 
         public AspMvcActionAttribute([NotNull] string anonymousProperty)
         {
-            this.AnonymousProperty = anonymousProperty;
+            AnonymousProperty = anonymousProperty;
         }
 
         [NotNull]
@@ -556,7 +556,7 @@ namespace JetBrains.Annotations
 
         public AspMvcAreaAttribute([NotNull] string anonymousProperty)
         {
-            this.AnonymousProperty = anonymousProperty;
+            AnonymousProperty = anonymousProperty;
         }
 
         [NotNull]
@@ -579,7 +579,7 @@ namespace JetBrains.Annotations
 
         public AspMvcControllerAttribute([NotNull] string anonymousProperty)
         {
-            this.AnonymousProperty = anonymousProperty;
+            AnonymousProperty = anonymousProperty;
         }
 
         [NotNull]
@@ -684,7 +684,7 @@ namespace JetBrains.Annotations
     {
     }
 
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Field, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Field)]
     public sealed class HtmlElementAttributesAttribute : Attribute
     {
         public HtmlElementAttributesAttribute()
@@ -693,19 +693,19 @@ namespace JetBrains.Annotations
 
         public HtmlElementAttributesAttribute([NotNull] string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         [NotNull]
         public string Name { get; private set; }
     }
 
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class HtmlAttributeValueAttribute : Attribute
     {
         public HtmlAttributeValueAttribute([NotNull] string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         [NotNull]
@@ -719,7 +719,7 @@ namespace JetBrains.Annotations
     /// Use this attribute for custom wrappers similar to 
     /// <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>
     /// </summary>
-    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
     public sealed class RazorSectionAttribute : Attribute
     {
     }

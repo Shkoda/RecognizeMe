@@ -1,12 +1,20 @@
-﻿namespace GlobalPlay.Tools
+﻿#region imports
+
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
+using UnityEngine;
+
+#endregion
+
+namespace GlobalPlay.Tools
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Runtime.CompilerServices;
-    using JetBrains.Annotations;
-    using UnityEngine;
-    using UnityObject = UnityEngine.Object;
+    #region imports
+
+    using UnityObject = Object;
+
+    #endregion
 
     public class GameObjectPool : MonoBehaviour
     {
@@ -14,7 +22,6 @@
             new Dictionary<GameObject, List<GameObject>>();
 
         private readonly Dictionary<GameObject, GameObject> prefabDictionary = new Dictionary<GameObject, GameObject>();
-
         private static GameObjectPool Instance { get; set; }
 
         public static GameObject Get(GameObject prefab, Vector3 position, Quaternion rotation)

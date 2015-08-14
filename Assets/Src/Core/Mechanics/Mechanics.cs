@@ -1,18 +1,18 @@
-﻿using System.Collections.Generic;
-using GlobalPlay.Solitaire.Tools;
+﻿#region imports
+
+using System.Collections.Generic;
 using Shkoda.RecognizeMe.Core.Game.Cell;
 using Shkoda.RecognizeMe.Core.Game.Tile;
-using Shkoda.RecognizeMe.Core.Graphics;
+
+#endregion
 
 namespace Shkoda.RecognizeMe.Core.Mechanics
 {
-    using UnityEngine;
-    using System.Collections;
-
     public abstract class Mechanics
     {
-        protected GameProperties gameProperties;
+        protected readonly List<TileModel> tiles = new List<TileModel>();
         protected CellModel[][] cells;
+        protected GameProperties gameProperties;
 
         public CellModel[][] Cells
         {
@@ -20,8 +20,6 @@ namespace Shkoda.RecognizeMe.Core.Mechanics
         }
 
         public int Seed { get; set; }
-
-        protected readonly List<TileModel> tiles = new List<TileModel>();
 
         public List<TileModel> Tiles
         {

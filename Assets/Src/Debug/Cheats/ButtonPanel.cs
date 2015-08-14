@@ -1,7 +1,11 @@
+#region imports
+
 using System;
 using System.Collections.Generic;
 using Assets.Src.Debug.Cheats;
 using UnityEngine;
+
+#endregion
 
 public class ButtonPanel : MonoBehaviour
 {
@@ -55,9 +59,9 @@ public class ButtonPanel : MonoBehaviour
 
     public int DebugWindowId
     {
-        get { return this.debugWindowId; }
+        get { return debugWindowId; }
 
-        set { this.debugWindowId = value; }
+        set { debugWindowId = value; }
     }
 
     #region Updates, GUI
@@ -65,13 +69,13 @@ public class ButtonPanel : MonoBehaviour
     // Use this for initialization
     public void Start()
     {
-        this.windowRect = new Rect(0, 0, Screen.width, 0);
+        windowRect = new Rect(0, 0, Screen.width, 0);
 
-        this.buttonHeight = Screen.height*0.04f;
-        this.buttonWidth = this.buttonHeight*3;
+        buttonHeight = Screen.height*0.04f;
+        buttonWidth = buttonHeight*3;
 
-        this.ButtonXPosition = Math.Max(Screen.width*this.RelationPositionX - this.buttonWidth, 0);
-        this.buttonYPosition = Screen.height - this.buttonHeight;
+        ButtonXPosition = Math.Max(Screen.width*RelationPositionX - buttonWidth, 0);
+        buttonYPosition = Screen.height - buttonHeight;
 
         if (ActionList == null)
         {
@@ -88,7 +92,7 @@ public class ButtonPanel : MonoBehaviour
             if (performable != null)
             {
                 var cheat = new CheatButton(performable, ElementHeight(performable.Name), totalTextHeight + 2*Margin);
-                this.buttonList.Add(cheat);
+                buttonList.Add(cheat);
                 totalTextHeight += cheat.Height;
             }
         }
@@ -101,7 +105,7 @@ public class ButtonPanel : MonoBehaviour
                     script,
                     ElementHeight(script.GetType().ToString()),
                     totalTextHeight + 2*Margin);
-                this.buttonList.Add(scriptButton);
+                buttonList.Add(scriptButton);
                 totalTextHeight += scriptButton.Height;
             }
         }
@@ -117,7 +121,7 @@ public class ButtonPanel : MonoBehaviour
             ScriptList = new List<MonoBehaviour>();
         }
 
-        this.ScriptList.Add(script);
+        ScriptList.Add(script);
     }
 
     public void AddPerformable(Performable script)
@@ -127,7 +131,7 @@ public class ButtonPanel : MonoBehaviour
             ActionList = new List<Performable>();
         }
 
-        this.ActionList.Add(script);
+        ActionList.Add(script);
     }
 
     private float ElementHeight(string elementText)
@@ -139,109 +143,109 @@ public class ButtonPanel : MonoBehaviour
     private void Update()
     {
         // Who knows, maybe someone wants to play on android without touchscreen
-        bool isDraggingWithMouse = this.isDragging && Input.GetMouseButtonUp(0);
+        var isDraggingWithMouse = isDragging && Input.GetMouseButtonUp(0);
 
         // touchscreen
-        bool isDraggingWithMultiTouch = this.isDragging && Input.multiTouchEnabled
-                                        && (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended);
+        var isDraggingWithMultiTouch = isDragging && Input.multiTouchEnabled
+                                       && (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended);
 
         if (isDraggingWithMouse || isDraggingWithMultiTouch)
         {
             isDragging = false;
-            float y = isDraggingWithMouse ? Input.mousePosition.y : Input.GetTouch(0).position.y;
+            var y = isDraggingWithMouse ? Input.mousePosition.y : Input.GetTouch(0).position.y;
 
             if (y > Screen.height*0.1 && y < boundTopY*0.9)
             {
-                this.isFixed = true;
-                this.isMaximized = false;
+                isFixed = true;
+                isMaximized = false;
             }
             else if (y > Screen.height*0.1)
             {
-                this.isMaximizing = true;
+                isMaximizing = true;
             }
             else
             {
-                this.isMinimizing = true;
+                isMinimizing = true;
             }
         }
     }
 
     private void SetDefaultStyle()
     {
-        this.buttonStyle = GUI.skin.button;
-        this.textStyle = GUI.skin.button;
+        buttonStyle = GUI.skin.button;
+        textStyle = GUI.skin.button;
     }
 
     private bool ControlTabPressed()
     {
         return
             GUI.RepeatButton(
-                new Rect(this.ButtonXPosition, this.buttonYPosition + 2*Margin, this.buttonWidth, this.buttonHeight),
-                new GUIContent(this.TabName),
-                this.buttonStyle);
+                new Rect(ButtonXPosition, buttonYPosition + 2*Margin, buttonWidth, buttonHeight),
+                new GUIContent(TabName),
+                buttonStyle);
     }
 
     private void OnGUI()
     {
-        if (this.buttonStyle == null)
+        if (buttonStyle == null)
         {
-            this.SetDefaultStyle();
+            SetDefaultStyle();
         }
 
-        if (this.ControlTabPressed())
+        if (ControlTabPressed())
         {
-            if (!this.isDragging)
+            if (!isDragging)
             {
                 if (Input.multiTouchEnabled && Input.touchCount == 1)
                 {
                     // touch 
-                    this.deltaY = this.buttonYPosition + Input.GetTouch(0).position.y;
+                    deltaY = buttonYPosition + Input.GetTouch(0).position.y;
                 }
                 else if (Input.GetMouseButton(0))
                 {
                     // mouse
-                    this.deltaY = this.buttonYPosition + Input.mousePosition.y;
+                    deltaY = buttonYPosition + Input.mousePosition.y;
                 }
             }
 
-            this.isMaximizing = false;
-            this.isMinimizing = false;
-            this.isMaximized = false;
-            this.isFixed = false;
-            this.isDragging = true;
+            isMaximizing = false;
+            isMinimizing = false;
+            isMaximized = false;
+            isFixed = false;
+            isDragging = true;
         }
 
-        if (this.isMaximizing)
+        if (isMaximizing)
         {
-            this.buttonYPosition -= this.AnimateSpeed;
-            if (this.buttonYPosition < Screen.height - boundTopY)
+            buttonYPosition -= AnimateSpeed;
+            if (buttonYPosition < Screen.height - boundTopY)
             {
-                this.buttonYPosition = Screen.height - boundTopY;
-                this.isMaximized = true;
-                this.isMaximizing = false;
+                buttonYPosition = Screen.height - boundTopY;
+                isMaximized = true;
+                isMaximizing = false;
             }
         }
 
-        if (this.isMinimizing)
+        if (isMinimizing)
         {
-            this.buttonYPosition += this.AnimateSpeed;
-            if (this.buttonYPosition + this.buttonHeight > Screen.height)
+            buttonYPosition += AnimateSpeed;
+            if (buttonYPosition + buttonHeight > Screen.height)
             {
-                this.buttonYPosition = Screen.height - this.buttonHeight;
-                this.isMinimizing = false;
+                buttonYPosition = Screen.height - buttonHeight;
+                isMinimizing = false;
             }
         }
 
-        if (this.isDragging)
+        if (isDragging)
         {
-            buttonYPosition = this.Clamp(-Input.mousePosition.y + this.deltaY, 0, Screen.height - this.buttonHeight);
+            buttonYPosition = Clamp(-Input.mousePosition.y + deltaY, 0, Screen.height - buttonHeight);
         }
 
-        this.windowRect.Set(this.windowRect.x, this.buttonYPosition, Screen.width, Screen.height - this.buttonYPosition);
+        windowRect.Set(windowRect.x, buttonYPosition, Screen.width, Screen.height - buttonYPosition);
 
-        if (this.isFixed || this.isDragging || this.isMaximizing || this.isMinimizing || this.isMaximized)
+        if (isFixed || isDragging || isMaximizing || isMinimizing || isMaximized)
         {
-            GUI.Window(this.debugWindowId, this.windowRect, this.OnPanelIsVisible, string.Empty);
+            GUI.Window(debugWindowId, windowRect, OnPanelIsVisible, string.Empty);
         }
     }
 
@@ -256,39 +260,39 @@ public class ButtonPanel : MonoBehaviour
             GUI.BeginScrollView(
                 new Rect(
                     Margin*2,
-                    this.buttonHeight + WindowHeaderHeight + Margin,
-                    this.windowRect.width - 6,
+                    buttonHeight + WindowHeaderHeight + Margin,
+                    windowRect.width - 6,
                     scrollViewHeight),
-                this.scrollViewVector,
-                new Rect(0, 0, this.windowRect.width - 22, totalTextHeight + 100 + Margin));
+                scrollViewVector,
+                new Rect(0, 0, windowRect.width - 22, totalTextHeight + 100 + Margin));
     }
 
     private bool ActionPressed(ConsoleButton cheat)
     {
         return GUI.Button(
-            new Rect(0, cheat.Offset + Margin, this.windowRect.width - 21 - Margin, cheat.Height - Margin),
+            new Rect(0, cheat.Offset + Margin, windowRect.width - 21 - Margin, cheat.Height - Margin),
             "[Perform Action] " + cheat.Name,
-            this.textStyle);
+            textStyle);
     }
 
     private void OnPanelIsVisible(int windowId)
     {
-        float scrollViewHeight = this.windowRect.height - Margin*2 - WindowHeaderHeight - this.buttonHeight;
+        var scrollViewHeight = windowRect.height - Margin*2 - WindowHeaderHeight - buttonHeight;
 
         if (scrollViewHeight > 0)
         {
-            this.scrollViewVector = this.ScrollViewVector(scrollViewHeight);
+            scrollViewVector = ScrollViewVector(scrollViewHeight);
 
-            foreach (ConsoleButton action in this.buttonList)
+            foreach (var action in buttonList)
             {
-                if (action.Offset > this.scrollViewVector.y + scrollViewHeight)
+                if (action.Offset > scrollViewVector.y + scrollViewHeight)
                 {
                     break;
                 }
 
-                if (action.Offset + action.Height > this.scrollViewVector.y)
+                if (action.Offset + action.Height > scrollViewVector.y)
                 {
-                    if (this.ActionPressed(action))
+                    if (ActionPressed(action))
                     {
                         action.Perform();
                     }

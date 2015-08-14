@@ -1,9 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-
-
-public struct TileValue
+﻿public struct TileValue
 {
     public readonly char Char;
 
@@ -14,6 +9,6 @@ public struct TileValue
 
     public override string ToString()
     {
-        return String.Format("'{0}'", Char);
+        return string.Format("'{0}'", Char);
     }
 }

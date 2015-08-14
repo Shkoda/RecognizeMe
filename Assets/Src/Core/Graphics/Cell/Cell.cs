@@ -1,19 +1,20 @@
-﻿using System;
+﻿#region imports
+
 using System.Collections;
-using Assets.Src.Core.Game.Tile;
+using Assets.Src.Core.Game.Cell;
 using JetBrains.Annotations;
 using UnityEngine;
+
+#endregion
 
 namespace Shkoda.RecognizeMe.Core.Graphics
 {
     public class Cell : MonoBehaviour
     {
         [SerializeField] private GameObject animationPrefab;
-
 //        private BoxCollider boxCollider;
 
         public CellId CellId;
-
         private Vector3 defaultColliderBorderSize;
         private Vector3 position;
         private Tile tile;
@@ -29,9 +30,9 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public Tile PopTile()
         {
-            var popped = this.Tile;
+            var popped = Tile;
             popped.ContainingCell = null;
-            this.Tile = null;
+            Tile = null;
             UpdateColliderSize();
             return popped;
         }
@@ -125,13 +126,13 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         public bool HasId(CellId id)
         {
-            return this.CellId.Equals(id);
+            return CellId.Equals(id);
         }
 
         public override string ToString()
         {
             var content = Tile == null ? "EMPTY" : Tile.TileValue.ToString();
-            return String.Format("{0} [{1}]", CellId, content);
+            return string.Format("{0} [{1}]", CellId, content);
         }
     }
 }

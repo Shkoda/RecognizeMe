@@ -1,18 +1,20 @@
-﻿namespace Assets.Src.Debug.Cheats
-{
-    using UnityEngine;
+﻿#region imports
 
+using UnityEngine;
+
+#endregion
+
+namespace Assets.Src.Debug.Cheats
+{
     public abstract class Performable
     {
-        public abstract void Perform();
-
         public string Name { get; protected set; }
+        public abstract void Perform();
     }
 
     public class ShaderPerformable : Performable
     {
         private Renderer renderer;
-
         private Shader shader;
 
         public ShaderPerformable(Renderer renderer, Shader shader)
@@ -31,7 +33,6 @@
     public class TexturePerformable : Performable
     {
         private Renderer renderer;
-
         private Texture texture;
 
         public TexturePerformable(Renderer renderer, Texture texture)
@@ -49,9 +50,8 @@
 
     public class MaterialPerformable : Performable
     {
-        private Renderer renderer;
-
         private Material material;
+        private Renderer renderer;
 
         public MaterialPerformable(Renderer renderer, Material material, string name = null)
         {
@@ -62,7 +62,7 @@
 
         public override void Perform()
         {
-            renderer.sharedMaterial = this.material;
+            renderer.sharedMaterial = material;
         }
     }
 
@@ -75,7 +75,7 @@
 
         public override void Perform()
         {
-            Debug.Log("Perform First");
+            UnityEngine.Debug.Log("Perform First");
             Debugger.Log("Perform First ");
         }
     }
@@ -89,7 +89,7 @@
 
         public override void Perform()
         {
-            Debug.Log("Perform Second");
+            UnityEngine.Debug.Log("Perform Second");
             Debugger.Log("Perform Second");
         }
     }

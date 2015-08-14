@@ -1,20 +1,24 @@
-﻿namespace GlobalPlay.Solitaire.Tools
-{
-    using System;
-    using System.Collections.Generic;
+﻿#region imports
 
+using System;
+using System.Collections.Generic;
+
+#endregion
+
+namespace GlobalPlay.Solitaire.Tools
+{
     internal class ListWrapper<T>
     {
         private List<T> list;
 
-        public List<T> List
-        {
-            get { return list; }
-        }
-
         public ListWrapper(List<T> list)
         {
             this.list = list;
+        }
+
+        public List<T> List
+        {
+            get { return list; }
         }
 
         public ListWrapper<T> Distinct()
@@ -28,7 +32,7 @@
                 }
             }
 
-            this.list = result;
+            list = result;
             return this;
         }
 
@@ -53,7 +57,7 @@
                 }
             }
 
-            this.list = result;
+            list = result;
             return this;
         }
 
@@ -85,7 +89,7 @@
 
         public int Sum(Func<T, int> mapper)
         {
-            int sum = 0;
+            var sum = 0;
             for (int i = 0, n = list.Count; i < n; i++)
             {
                 sum += mapper(list[i]);

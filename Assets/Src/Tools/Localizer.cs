@@ -1,32 +1,34 @@
+#region imports
+
+using System.Collections.Generic;
+using System.Xml;
+using JetBrains.Annotations;
+using UnityEngine;
+
+#endregion
+
 namespace GlobalPlay.Tools
 {
-    using JetBrains.Annotations;
-    using System.Collections.Generic;
-    using System.Xml;
-    using UnityEngine;
-
     public sealed class Localizer : MonoBehaviour
     {
-        private Dictionary<string, Dictionary<string, string>> languages;
-
         private Dictionary<string, TextAsset> filesCache;
+        private Dictionary<string, Dictionary<string, string>> languages;
+        [EditorAssigned] public TextAsset[] xmlFiles;
 
         /// <summary>
         /// Strings collection for current language.
         /// </summary>
         public Dictionary<string, string> Strings { get; private set; }
 
-        [EditorAssigned] public TextAsset[] xmlFiles;
-
         public static Localizer Instance { get; private set; }
 
         public bool DoLocalizeAndFormat(string key, out string result, params object[] args)
         {
             result = key;
-            bool localized = false;
+            var localized = false;
             string val = null;
 
-            if (this.Strings.TryGetValue(key, out val))
+            if (Strings.TryGetValue(key, out val))
             {
                 result = val;
 
@@ -44,7 +46,7 @@ namespace GlobalPlay.Tools
         private void Awake()
         {
             Instance = this;
-            this.Strings = new Dictionary<string, string>();
+            Strings = new Dictionary<string, string>();
 
 #if UNITY_EDITOR
             PlayerPrefs.SetString("Language", "EN");
@@ -61,7 +63,7 @@ namespace GlobalPlay.Tools
                 return;
             }
 
-            string langName = PlayerPrefs.GetString("Language").ToLower();
+            var langName = PlayerPrefs.GetString("Language").ToLower();
 
             if (filesCache == null)
             {
@@ -91,7 +93,7 @@ namespace GlobalPlay.Tools
                     continue;
                 }
 
-                string langName = GetLocale(file.name);
+                var langName = GetLocale(file.name);
 
                 if (filesCache.ContainsKey(langName))
                 {
@@ -104,7 +106,7 @@ namespace GlobalPlay.Tools
 
         private static string GetLocale(string fileName)
         {
-            int idx = fileName.IndexOf('_') + 1;
+            var idx = fileName.IndexOf('_') + 1;
 
             if (idx < 0 || idx + 1 > fileName.Length)
             {
@@ -112,7 +114,7 @@ namespace GlobalPlay.Tools
                 return null;
             }
 
-            string langName = fileName.Substring(idx).ToLower();
+            var langName = fileName.Substring(idx).ToLower();
             return langName;
         }
 
@@ -136,16 +138,16 @@ namespace GlobalPlay.Tools
 
         private Dictionary<string, string> ReadXML(TextAsset file)
         {
-            XmlDocument xmlDoc = new XmlDocument();
+            var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(file.text);
-            XmlNodeList wordsList = xmlDoc.GetElementsByTagName("item");
+            var wordsList = xmlDoc.GetElementsByTagName("item");
 
             var obj = new Dictionary<string, string>();
 
             foreach (XmlNode word in wordsList)
             {
-                string key = word.Attributes["key"].Value;
-                string text = word.Attributes["text"].Value;
+                var key = word.Attributes["key"].Value;
+                var text = word.Attributes["text"].Value;
 
                 if (obj.ContainsKey(key))
                 {

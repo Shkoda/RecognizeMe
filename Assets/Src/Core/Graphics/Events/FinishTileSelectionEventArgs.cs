@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#region imports
+
+using System;
+
+#endregion
 
 namespace Shkoda.RecognizeMe.Core.Graphics.Events
 {

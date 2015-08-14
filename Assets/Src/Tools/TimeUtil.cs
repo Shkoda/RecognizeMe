@@ -1,20 +1,24 @@
-﻿namespace GlobalPlay.Tools
-{
-    using System;
-    using UnityEngine;
+﻿#region imports
 
+using System;
+using UnityEngine;
+
+#endregion
+
+namespace GlobalPlay.Tools
+{
     public class TimeUtil
     {
         private static TimeSpan diffWithServer;
 
-        public static String FormatTime(TimeSpan time)
+        public static string FormatTime(TimeSpan time)
         {
             return string.Format("{0:00}:{1:00}:{2:00}", (uint) time.TotalHours, time.Minutes, time.Seconds);
         }
 
         public static void SetServerTime(long serverTime)
         {
-            DateTime time = UtcDateTimeFromJavaUtcTime(serverTime);
+            var time = UtcDateTimeFromJavaUtcTime(serverTime);
             diffWithServer = time - DateTime.UtcNow;
             Debug.Log(string.Format("Diff with server time = {0}", diffWithServer));
         }

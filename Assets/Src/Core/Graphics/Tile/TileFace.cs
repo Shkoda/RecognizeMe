@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿#region imports
+
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+
+#endregion
 
 namespace Shkoda.RecognizeMe.Core.Graphics
 {
@@ -18,7 +21,6 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 //            Debug.Log(string.Format("uv for {0} is {1}", value, tilesCoordinates[value]));
             return tilesCoordinates[value];
         }
-
 
         private void Awake()
         {

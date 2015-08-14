@@ -1,23 +1,23 @@
-﻿namespace Shkoda.RecognizeMe.Core.Game
-{
-    using System;
-    using System.Collections;
-    using System.Diagnostics;
-    using Shkoda.Rec.Core.Controllers;
-    using Shkoda.RecognizeMe.Core.Game.Achievements;
-    using UnityEngine;
-    using Debug = UnityEngine.Debug;
-    using Graphics = Shkoda.RecognizeMe.Core.Graphics.Graphics;
-    using Random = UnityEngine.Random;
+﻿#region imports
 
+using System;
+using System.Collections;
+using System.Diagnostics;
+using Shkoda.Rec.Core.Controllers;
+using Shkoda.RecognizeMe.Core.Game.Achievements;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
+using Random = UnityEngine.Random;
+
+#endregion
+
+namespace Shkoda.RecognizeMe.Core.Game
+{
     public class Game
     {
-        private readonly Graphics graphics = Graphics.Instance;
-        public RecognizeController Controller { get; protected set; }
+        private readonly Graphics.Graphics graphics = Graphics.Graphics.Instance;
         private readonly Stopwatch timer = new Stopwatch();
         private readonly IEnumerator timerRoutine;
-
-        public event Action<GameFinishedEventArgs> GameFinished = delegate { };
 
         public Game(int seed)
         {
@@ -25,6 +25,8 @@
             Controller = new RecognizeController(seed);
         }
 
+        public RecognizeController Controller { get; protected set; }
+        public event Action<GameFinishedEventArgs> GameFinished = delegate { };
 
         public void Start()
         {
@@ -44,7 +46,7 @@
         {
             while (true)
             {
-                Graphics.Instance.UpdateTimer(timer.ElapsedMilliseconds);
+                Graphics.Graphics.Instance.UpdateTimer(timer.ElapsedMilliseconds);
                 yield return new WaitForSeconds(1);
             }
         }
@@ -75,7 +77,7 @@
 #endif
             UnSubscribe();
             AppController.StopRoutine(timerRoutine);
-            Graphics.Instance.CleanUpGameHud();
+            Graphics.Graphics.Instance.CleanUpGameHud();
         }
 
         private void UnSubscribe()

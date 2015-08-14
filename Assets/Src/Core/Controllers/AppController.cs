@@ -1,17 +1,18 @@
-﻿using System;
+﻿#region imports
+
 using System.Collections;
 using JetBrains.Annotations;
 using Shkoda.RecognizeMe.Core.Game;
 using UnityEngine;
 using Graphics = Shkoda.RecognizeMe.Core.Graphics.Graphics;
 
+#endregion
+
 [UsedImplicitly]
 public class AppController : MonoBehaviour
 {
     private static Game game;
-
     private static AppController instance;
-
     private GameObject fieldObject;
 
     public static Game Game
@@ -29,10 +30,9 @@ public class AppController : MonoBehaviour
     [UsedImplicitly]
     private void Start()
     {
-        Graphics.Instance.GameChosen += this.OnGameChosen;
-        Graphics.Instance.GameClosed += this.OnGameClosed;
+        Graphics.Instance.GameChosen += OnGameChosen;
+        Graphics.Instance.GameClosed += OnGameClosed;
     }
-
 
     private void OnGameChosen(Game newGame)
     {
@@ -46,7 +46,7 @@ public class AppController : MonoBehaviour
 
     private void OnGameClosed()
     {
-        this.CleanUp();
+        CleanUp();
 //        player.FinishGame();
     }
 

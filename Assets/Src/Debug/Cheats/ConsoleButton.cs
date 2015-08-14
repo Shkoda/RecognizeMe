@@ -1,26 +1,27 @@
-﻿namespace Assets.Src.Debug.Cheats
-{
-    using UnityEngine;
+﻿#region imports
 
+using UnityEngine;
+
+#endregion
+
+namespace Assets.Src.Debug.Cheats
+{
     public abstract class ConsoleButton
     {
         protected ConsoleButton(float height, float offset)
         {
-            this.Height = height;
-            this.Offset = offset;
+            Height = height;
+            Offset = offset;
         }
 
         public float Height { get; private set; }
-
         public float Offset { get; private set; }
-
         public string Name { get; protected set; }
-
         public abstract void Perform();
 
         public override string ToString()
         {
-            return this.Name;
+            return Name;
         }
     }
 
@@ -29,8 +30,8 @@
         public CheatButton(Performable performable, float height, float offset)
             : base(height, offset)
         {
-            this.Name = performable.Name;
-            this.Action = performable;
+            Name = performable.Name;
+            Action = performable;
         }
 
         public Performable Action { get; private set; }
@@ -46,8 +47,8 @@
         public ScriptButton(MonoBehaviour sript, float height, float offset)
             : base(height, offset)
         {
-            this.Name = sript.GetType().ToString();
-            this.Script = sript;
+            Name = sript.GetType().ToString();
+            Script = sript;
         }
 
         public MonoBehaviour Script { get; private set; }

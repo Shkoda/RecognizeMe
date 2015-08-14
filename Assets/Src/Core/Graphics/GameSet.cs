@@ -1,42 +1,29 @@
-﻿using System;
+﻿#region imports
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Assets.Src.Core.Game.Tile;
+using Assets.Src.Core.Game.Cell;
 using Assets.Src.Core.Graphics.Field;
-using GlobalPlay.Tools;
 using JetBrains.Annotations;
 using Shkoda.RecognizeMe.Core.Game.Tile;
 using Shkoda.RecognizeMe.Core.Graphics.Events;
 using UnityEngine;
 
+#endregion
+
 namespace Shkoda.RecognizeMe.Core.Graphics
 {
     public class GameSet : MonoBehaviour
     {
-        public bool NoModeEnabled { get; private set; }
-
         /// <summary>
         /// Is set to true when cards were moved between decks on last frame
         /// </summary>
         private bool cardsMovedDirtyFlag;
 
+        public bool NoModeEnabled { get; private set; }
         public bool IsSelectingTiles { get; private set; }
-
-        #region fields
-
-        public event EventHandler<StartTileSelectionEventArgs> TileSelectionStarted = delegate { };
-        public event EventHandler<UpdateTileSelectionEventArgs> TileSelectionUpdated = delegate { };
-        public event EventHandler<FinishTileSelectionEventArgs> TileSelectionFinished = delegate { };
-
-        [EditorAssigned] public SimpleCellFieldGenerator CellGenerator;
-        [EditorAssigned] public TileGenerator TileGenerator;
-
-        private List<Tile> allTiles;
-        private Dictionary<CellId, Cell> allCells;
-
-        #endregion
 
         public IEnumerator Init()
         {
@@ -46,7 +33,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
             CellGenerator.GenerateCells();
 
-            this.allCells =
+            allCells =
                 GameObject.FindGameObjectsWithTag("Cell")
                     .Select(o => o.GetComponent<Cell>())
                     .Where(cell => cell != null)
@@ -57,34 +44,33 @@ namespace Shkoda.RecognizeMe.Core.Graphics
         {
             TileGenerator.GeneratePhysicalTiles(tileModels, allCells);
 
-            this.allTiles =
+            allTiles =
                 GameObject.FindGameObjectsWithTag("Tile")
                     .Select(o => o.GetComponent<Tile>())
                     .Where(tile => tile != null)
                     .ToList();
 
-            foreach (var tile in this.allTiles)
+            foreach (var tile in allTiles)
             {
                 tile.Init();
             }
         }
 
-
         public Cell CellFromId(CellId id)
         {
-            return this.allCells[id];
+            return allCells[id];
         }
 
         public void SetTileValue(CellId cellId, TileValue tileValue)
         {
-            var cell = this.CellFromId(cellId);
+            var cell = CellFromId(cellId);
             cell.Tile.SetTileValue(tileValue);
         }
 
         private void HandleSwipe()
         {
             Debug.Log("swiping pointer");
-            int distance = 100;
+            var distance = 100;
             RaycastHit hit;
             if (Physics.Raycast(Pointer.PointerRayInWorldspace,
                 out hit,
@@ -95,7 +81,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                 var eventArgs = new UpdateTileSelectionEventArgs(hitTile);
                 try
                 {
-                    this.TileSelectionUpdated(hitTile, eventArgs);
+                    TileSelectionUpdated(hitTile, eventArgs);
                 }
                 catch (Exception exception)
                 {
@@ -112,7 +98,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
             try
             {
-                this.TileSelectionFinished(null, eventArgs);
+                TileSelectionFinished(null, eventArgs);
             }
             catch (Exception exception)
             {
@@ -122,7 +108,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
 
         private void HandleNewSelectionStart()
         {
-            int distance = 100;
+            var distance = 100;
             RaycastHit hit;
             if (Physics.Raycast(Pointer.PointerRayInWorldspace,
                 out hit,
@@ -136,7 +122,7 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                 var eventArgs = new StartTileSelectionEventArgs(hitTile);
                 try
                 {
-                    this.TileSelectionStarted(hitTile, eventArgs);
+                    TileSelectionStarted(hitTile, eventArgs);
                 }
                 catch (Exception exception)
                 {
@@ -144,7 +130,6 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                 }
             }
         }
-
 
         public void ProcessPointerEvents()
         {
@@ -162,5 +147,19 @@ namespace Shkoda.RecognizeMe.Core.Graphics
                 HandleReleaseAfterSwipe();
             }
         }
+
+        #region fields
+
+        public event EventHandler<StartTileSelectionEventArgs> TileSelectionStarted = delegate { };
+        public event EventHandler<UpdateTileSelectionEventArgs> TileSelectionUpdated = delegate { };
+        public event EventHandler<FinishTileSelectionEventArgs> TileSelectionFinished = delegate { };
+
+        [EditorAssigned] public SimpleCellFieldGenerator CellGenerator;
+        [EditorAssigned] public TileGenerator TileGenerator;
+
+        private List<Tile> allTiles;
+        private Dictionary<CellId, Cell> allCells;
+
+        #endregion
     }
 }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using GlobalPlay.Solitaire.Tools;
+﻿#region imports
+
+using System;
 using Shkoda.RecognizeMe.Core.Game.Cell;
 using Shkoda.RecognizeMe.Core.Game.Tile;
-using Shkoda.RecognizeMe.Core.Graphics;
-using Graphics = Shkoda.RecognizeMe.Core.Graphics.Graphics;
-using UnityEngine;
-using Random = System.Random;
+
+#endregion
 
 namespace Shkoda.RecognizeMe.Core.Mechanics
 {
@@ -22,11 +18,11 @@ namespace Shkoda.RecognizeMe.Core.Mechanics
             var rowNumber = gameProperties.RowNumber;
 
             cells = new CellModel[rowNumber][];
-            for (int row = 0; row < rowNumber; row++)
+            for (var row = 0; row < rowNumber; row++)
             {
                 cells[row] = new CellModel[columnNumber];
 
-                for (int column = 0; column < columnNumber; column++)
+                for (var column = 0; column < columnNumber; column++)
                 {
                     var cell = new CellModel(columnNumber*row + column, row, column);
                     cells[row][column] = cell;
@@ -39,12 +35,12 @@ namespace Shkoda.RecognizeMe.Core.Mechanics
 //            Debug.Log("SimpleMechanics.GenerateRandomTileSet(GameProperties properties)");
             var random = new Random();
 
-            for (int row = 0; row < properties.RowNumber; row++)
+            for (var row = 0; row < properties.RowNumber; row++)
             {
-                for (int column = 0; column < properties.ColumnNumber; column++)
+                for (var column = 0; column < properties.ColumnNumber; column++)
                 {
-                    TileValue tileValue = new TileValue((char) ('A' + random.Next(26)));
-                    TileModel model = new TileModel(tileValue);
+                    var tileValue = new TileValue((char) ('A' + random.Next(26)));
+                    var model = new TileModel(tileValue);
                     tiles.Add(model);
 
                     Cells[row][column].Tile = model;

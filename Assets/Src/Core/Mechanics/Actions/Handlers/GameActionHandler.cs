@@ -1,12 +1,11 @@
-﻿using Shkoda.RecognizeMe.Core.Game.Achievements;
+﻿#region imports
+
+using Shkoda.RecognizeMe.Core.Game.Achievements;
+
+#endregion
 
 namespace Shkoda.RecognizeMe.Core.Mechanics.Actions.Handlers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     public abstract class GameActionHandler
     {
         protected bool triggerAchievements;
@@ -17,7 +16,7 @@ namespace Shkoda.RecognizeMe.Core.Mechanics.Actions.Handlers
         /// <param name="seed"></param>
         public GameActionHandler(int seed)
         {
-            this.triggerAchievements = (seed != -1);
+            triggerAchievements = (seed != -1);
         }
 
         public virtual void HandleAction(IAction action)

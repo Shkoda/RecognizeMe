@@ -1,9 +1,14 @@
+#region imports
+
+using System;
+using JetBrains.Annotations;
+using UnityEngine;
+using UnityEngine.UI;
+
+#endregion
+
 namespace GlobalPlay.Tools
 {
-    using JetBrains.Annotations;
-    using UnityEngine;
-    using UnityEngine.UI;
-
     [RequireComponent(typeof (Text))]
     public sealed class Localize : MonoBehaviour
     {
@@ -19,7 +24,7 @@ namespace GlobalPlay.Tools
         private void Start()
         {
             // Localizer initialized before this
-            this.DoLocalize();
+            DoLocalize();
         }
 
         public void DoLocalize(params object[] args)
@@ -35,7 +40,7 @@ namespace GlobalPlay.Tools
                 Localizer.Instance.DoLocalizeAndFormat(label.text, out tmp, args);
                 label.text = tmp;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 Debug.LogError("Localization failed for " + gameObject.name);
             }

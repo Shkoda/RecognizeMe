@@ -1,33 +1,32 @@
-﻿namespace GlobalPlay.Tools
-{
-    using System;
-    using UnityEngine;
-    using Random = UnityEngine.Random;
+﻿#region imports
 
+using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
+
+#endregion
+
+namespace GlobalPlay.Tools
+{
     public class ExplosionStyleMover : MonoBehaviour
     {
-        public float Radius = 1f;
-        public float RadiusUniformOffset = 0.1f;
+        private float actualAngle;
         private float actualRadius;
-
         public float Angle = 60f;
         public float AngleUniformOffset = 10f;
-        private float actualAngle;
-
-        public Vector3 StartPoint;
-        public Vector3 EndPoint;
-
-        public float TotalTime = 2f;
-        public float TimeStretch = 0.1f;
-
         private Vector3 centerPoint;
-
-        private Vector3 startHandle;
         private Vector3 centerToStartHandle, centerToEndHandle;
         private Vector3 endHandle;
-
+        public Vector3 EndPoint;
         public AnimationCurve ExplosionCurve;
         public AnimationCurve ImplosionCurve;
+        private Vector3 prevPos;
+        public float Radius = 1f;
+        public float RadiusUniformOffset = 0.1f;
+        private Vector3 startHandle;
+        public Vector3 StartPoint;
+        public float TimeStretch = 0.1f;
+        public float TotalTime = 2f;
 
         public void Start()
         {
@@ -46,19 +45,17 @@
             centerToStartHandle = centerPoint + leftCenterToEnd;
             startHandle = StartPoint - (StartPoint - centerToStartHandle)/5;
 
-            this.transform.position = StartPoint;
+            transform.position = StartPoint;
 
             LeanTween.move(
-                this.gameObject,
+                gameObject,
                 new[] {StartPoint, centerToStartHandle, startHandle, centerPoint},
                 TotalTime/2).setEase(ExplosionCurve);
-            LeanTween.move(this.gameObject, new[] {centerPoint, endHandle, centerToEndHandle, EndPoint}, TotalTime/2)
+            LeanTween.move(gameObject, new[] {centerPoint, endHandle, centerToEndHandle, EndPoint}, TotalTime/2)
                 .setOnComplete(OnMovingComplete)
                 .setDelay(TotalTime/2)
                 .setEase(ImplosionCurve);
         }
-
-        private Vector3 prevPos;
 
         private void Update()
         {

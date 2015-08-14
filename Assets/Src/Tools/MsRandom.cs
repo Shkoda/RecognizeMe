@@ -1,15 +1,19 @@
-﻿namespace GlobalPlay.Solitaire.Tools
-{
-    using UnityEngine;
+﻿#region imports
 
+using UnityEngine;
+
+#endregion
+
+namespace GlobalPlay.Solitaire.Tools
+{
     public class MsRandom
     {
-        public int Seed { get; set; }
-
         public MsRandom()
         {
             Seed = (int) (Random.value*32000);
         }
+
+        public int Seed { get; set; }
 
         public int Next()
         {

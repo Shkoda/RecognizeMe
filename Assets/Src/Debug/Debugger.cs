@@ -1,5 +1,7 @@
 //#define NOLOG
 
+#region imports
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,6 +9,9 @@ using System.Threading;
 using GlobalPlay.Threading;
 using GlobalPlay.Tools;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
+#endregion
 
 public partial class Debugger : MonoBehaviour
 {
@@ -99,20 +104,20 @@ public partial class Debugger : MonoBehaviour
     {
         InterceptDebugMessages = true;
 
-        this.windowRect = new Rect(0, 0, Screen.width, 0);
+        windowRect = new Rect(0, 0, Screen.width, 0);
 
-        this.ButtonHeight = Screen.height*0.04f;
-        this.ButtonWidth = this.ButtonHeight*3;
+        ButtonHeight = Screen.height*0.04f;
+        ButtonWidth = ButtonHeight*3;
 
-        this.buttonYPosition = Screen.height - this.ButtonHeight;
+        buttonYPosition = Screen.height - ButtonHeight;
 
-        this.AddConsoleCommands();
+        AddConsoleCommands();
 
-        CrashReport[] reports = CrashReport.reports;
+        var reports = CrashReport.reports;
 
         if (reports != null)
         {
-            foreach (CrashReport crashReport in reports)
+            foreach (var crashReport in reports)
             {
                 Log(
                     string.Format("Crash report from {0}:\n{1}", crashReport.time, crashReport.text),
@@ -131,7 +136,7 @@ public partial class Debugger : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        this.UpdateConsole();
+        UpdateConsole();
 #if UNITY_FLASH
 
     // No touchscreen at all
@@ -156,42 +161,42 @@ public partial class Debugger : MonoBehaviour
 #else
 
         // Who knows, maybe someone wants to play on android without touchscreen
-        if (this.isDragging && Input.GetMouseButtonUp(0))
+        if (isDragging && Input.GetMouseButtonUp(0))
         {
             // mouse
-            this.isDragging = false;
+            isDragging = false;
             if (Input.mousePosition.y > Screen.height*0.1 && Input.mousePosition.y < Screen.height*0.94)
             {
-                this.isFixed = true;
-                this.isMaximized = false;
+                isFixed = true;
+                isMaximized = false;
             }
             else if (Input.mousePosition.y > Screen.height*0.1)
             {
-                this.isMaximizing = true;
+                isMaximizing = true;
             }
             else
             {
-                this.isMinimizing = true;
+                isMinimizing = true;
             }
         }
-        else if (this.isDragging && Input.multiTouchEnabled
+        else if (isDragging && Input.multiTouchEnabled
                  && (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended))
         {
             // touchscreen
-            Touch touch = Input.GetTouch(0);
-            this.isDragging = false;
+            var touch = Input.GetTouch(0);
+            isDragging = false;
             if (touch.position.y > Screen.height*0.1 && touch.position.x < Screen.height*0.9)
             {
-                this.isFixed = true;
-                this.isMaximized = false;
+                isFixed = true;
+                isMaximized = false;
             }
             else if (touch.position.y > Screen.height*0.1)
             {
-                this.isMaximizing = true;
+                isMaximizing = true;
             }
             else
             {
-                this.isMinimizing = true;
+                isMinimizing = true;
             }
         }
 
@@ -287,32 +292,32 @@ public partial class Debugger : MonoBehaviour
 
 #endif
 
-        if (this.buttonStyle == null)
+        if (buttonStyle == null)
         {
-            this.buttonStyle = GUI.skin.button;
-            this.textStyle = GUI.skin.box;
+            buttonStyle = GUI.skin.button;
+            textStyle = GUI.skin.box;
 
-            int fontSize = 0;
-            this.buttonStyle.fontSize = fontSize;
-            this.textStyle.fontSize = fontSize;
+            var fontSize = 0;
+            buttonStyle.fontSize = fontSize;
+            textStyle.fontSize = fontSize;
 
-            textHeight = this.textStyle.fontSize == 0 ? 25f : this.textStyle.fontSize*1.5f;
+            textHeight = textStyle.fontSize == 0 ? 25f : textStyle.fontSize*1.5f;
             textHeightWithMargin = textHeight + Margin;
 
-            this.textStyle.alignment = TextAnchor.MiddleLeft;
+            textStyle.alignment = TextAnchor.MiddleLeft;
         }
 
         if (
             GUI.RepeatButton(
                 new Rect(
-                    Screen.width*0.5f - this.ButtonWidth*0.5f,
-                    this.buttonYPosition + 2*Margin,
-                    this.ButtonWidth,
-                    this.ButtonHeight),
-                new GUIContent(this.ButtonText),
-                this.buttonStyle))
+                    Screen.width*0.5f - ButtonWidth*0.5f,
+                    buttonYPosition + 2*Margin,
+                    ButtonWidth,
+                    ButtonHeight),
+                new GUIContent(ButtonText),
+                buttonStyle))
         {
-            if (!this.isDragging)
+            if (!isDragging)
             {
 #if UNITY_FLASH
                 deltaY = buttonYPosition + Input.mousePosition.y;
@@ -320,63 +325,63 @@ public partial class Debugger : MonoBehaviour
                 if (Input.multiTouchEnabled && Input.touchCount == 1)
                 {
                     // touch 
-                    this.deltaY = this.buttonYPosition + Input.GetTouch(0).position.y;
+                    deltaY = buttonYPosition + Input.GetTouch(0).position.y;
                 }
                 else if (Input.GetMouseButton(0))
                 {
                     // mouse
-                    this.deltaY = this.buttonYPosition + Input.mousePosition.y;
+                    deltaY = buttonYPosition + Input.mousePosition.y;
                 }
 
 #endif
             }
 
-            this.isMaximizing = false;
-            this.isMinimizing = false;
-            this.isMaximized = false;
-            this.isFixed = false;
-            this.isDragging = true;
+            isMaximizing = false;
+            isMinimizing = false;
+            isMaximized = false;
+            isFixed = false;
+            isDragging = true;
         }
 
-        if (this.isMaximizing)
+        if (isMaximizing)
         {
-            this.buttonYPosition -= this.AnimateSpeed;
-            if (this.buttonYPosition < 0)
+            buttonYPosition -= AnimateSpeed;
+            if (buttonYPosition < 0)
             {
-                this.buttonYPosition = 0;
-                this.isMaximized = true;
-                this.isMaximizing = false;
+                buttonYPosition = 0;
+                isMaximized = true;
+                isMaximizing = false;
             }
         }
 
-        if (this.isMinimizing)
+        if (isMinimizing)
         {
-            this.buttonYPosition += this.AnimateSpeed;
-            if (this.buttonYPosition + this.ButtonHeight > Screen.height)
+            buttonYPosition += AnimateSpeed;
+            if (buttonYPosition + ButtonHeight > Screen.height)
             {
-                this.buttonYPosition = Screen.height - this.ButtonHeight;
-                this.isMinimizing = false;
+                buttonYPosition = Screen.height - ButtonHeight;
+                isMinimizing = false;
             }
         }
 
-        if (this.isDragging)
+        if (isDragging)
         {
-            this.buttonYPosition = -Input.mousePosition.y + this.deltaY;
-            if (this.buttonYPosition < 0)
+            buttonYPosition = -Input.mousePosition.y + deltaY;
+            if (buttonYPosition < 0)
             {
-                this.buttonYPosition = 0;
+                buttonYPosition = 0;
             }
 
-            if (this.buttonYPosition + this.ButtonHeight > Screen.height)
+            if (buttonYPosition + ButtonHeight > Screen.height)
             {
-                this.buttonYPosition = Screen.height - this.ButtonHeight;
+                buttonYPosition = Screen.height - ButtonHeight;
             }
         }
 
-        this.windowRect.Set(this.windowRect.x, this.buttonYPosition, Screen.width, Screen.height - this.buttonYPosition);
-        if (this.isFixed || this.isDragging || this.isMaximizing || this.isMinimizing || this.isMaximized)
+        windowRect.Set(windowRect.x, buttonYPosition, Screen.width, Screen.height - buttonYPosition);
+        if (isFixed || isDragging || isMaximizing || isMinimizing || isMaximized)
         {
-            GUI.Window(this.DebugWindowID, this.windowRect, this.OnDebugWindow, string.Empty);
+            GUI.Window(DebugWindowID, windowRect, OnDebugWindow, string.Empty);
         }
     }
 
@@ -405,7 +410,7 @@ public partial class Debugger : MonoBehaviour
 
     private static string PackLogs()
     {
-        string res = string.Empty;
+        var res = string.Empty;
         foreach (var message in logList)
         {
             res += message.ToString();
@@ -418,7 +423,7 @@ public partial class Debugger : MonoBehaviour
     public string SendAllLogsToServer()
     {
         var log = PackLogs();
-        var rnd = UnityEngine.Random.Range(0, 10000000);
+        var rnd = Random.Range(0, 10000000);
         var name = rnd.ToString("D6");
 
         return name;
@@ -432,56 +437,56 @@ public partial class Debugger : MonoBehaviour
         // var textHeight = textStyle.fontSize == 0 ? 25f : textStyle.fontSize * 1.5f;
         const float windowHeaderHeight = 17f;
 
-        float scrollViewHeight = this.windowRect.height - Margin*2 - windowHeaderHeight - this.ButtonHeight;
+        var scrollViewHeight = windowRect.height - Margin*2 - windowHeaderHeight - ButtonHeight;
 
         if (scrollViewHeight > 0)
         {
-            this.scrollViewVector =
+            scrollViewVector =
                 GUI.BeginScrollView(
                     new Rect(
                         Margin*2,
-                        this.ButtonHeight + windowHeaderHeight + Margin,
-                        this.windowRect.width - 6,
+                        ButtonHeight + windowHeaderHeight + Margin,
+                        windowRect.width - 6,
                         scrollViewHeight),
-                    this.scrollViewVector,
-                    new Rect(0, 0, this.windowRect.width - 22, _totalTextHeight + 100 + Margin));
+                    scrollViewVector,
+                    new Rect(0, 0, windowRect.width - 22, _totalTextHeight + 100 + Margin));
 
-            for (int i = 0; i < logListFiltered.Count; i++)
+            for (var i = 0; i < logListFiltered.Count; i++)
             {
-                if (logListFiltered[i].Top > this.scrollViewVector.y + scrollViewHeight)
+                if (logListFiltered[i].Top > scrollViewVector.y + scrollViewHeight)
                 {
                     break;
                 }
 
-                if (logListFiltered[i].Top + logListFiltered[i].Height > this.scrollViewVector.y)
+                if (logListFiltered[i].Top + logListFiltered[i].Height > scrollViewVector.y)
                 {
                     GUI.Box(
                         new Rect(
                             0,
                             logListFiltered[i].Top + Margin,
-                            this.windowRect.width - 21 - Margin,
+                            windowRect.width - 21 - Margin,
                             logListFiltered[i].Height - Margin),
                         logListFiltered[i].ToString(),
-                        this.textStyle);
+                        textStyle);
                 }
             }
 
             GUI.EndScrollView();
 
             if (GUI.Button(
-                new Rect(2*Margin, 2*Margin, this.ButtonWidth, this.ButtonHeight),
+                new Rect(2*Margin, 2*Margin, ButtonWidth, ButtonHeight),
                 new GUIContent("clear"),
-                this.buttonStyle))
+                buttonStyle))
             {
                 Clear();
             }
 
             if (GUI.Button(
-                new Rect(3*Margin + this.ButtonWidth, 2*Margin, this.ButtonWidth, this.ButtonHeight),
+                new Rect(3*Margin + ButtonWidth, 2*Margin, ButtonWidth, ButtonHeight),
                 new GUIContent("console"),
-                this.buttonStyle))
+                buttonStyle))
             {
-                this.SwitchConsoleMode();
+                SwitchConsoleMode();
             }
         }
     }
@@ -579,7 +584,7 @@ public partial class Debugger : MonoBehaviour
         logListFilteredIndices.Clear();
         _totalTextHeight = 0;
 
-        foreach (Message message in logList)
+        foreach (var message in logList)
         {
             if ((message.DebugType & filter) != 0)
             {
@@ -617,7 +622,7 @@ public partial class Debugger : MonoBehaviour
         {
             // Manual lock
             // Just "watch" here, so if anyone wants to write while it's locked - bad for him, he won't get a chance.
-            bool lockAcquired = false;
+            var lockAcquired = false;
             try
             {
                 lockAcquired = Monitor.TryEnter(logList);
@@ -662,7 +667,7 @@ public partial class Debugger : MonoBehaviour
             if (index2 != -1)
             {
                 // Manual lock (see above)
-                bool lockAcquired = false;
+                var lockAcquired = false;
                 try
                 {
                     lockAcquired = Monitor.TryEnter(logListFiltered);
@@ -826,5 +831,5 @@ public enum DebugType
 
     Console = 0x400,
 
-    Threading = 0x4000,
+    Threading = 0x4000
 }

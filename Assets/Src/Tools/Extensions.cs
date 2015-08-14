@@ -1,9 +1,13 @@
-﻿namespace GlobalPlay.Tools
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using UnityEngine;
+﻿#region imports
 
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+#endregion
+
+namespace GlobalPlay.Tools
+{
     public static class Extensions
     {
         public static bool AddOrReplace<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
@@ -32,10 +36,10 @@
         public static void Shuffle<T>(this List<T> texts)
         {
             // Knuth shuffle algorithm
-            for (int t = 0; t < texts.Count; t++)
+            for (var t = 0; t < texts.Count; t++)
             {
-                T tmp = texts[t];
-                int r = Random.Range(t, texts.Count);
+                var tmp = texts[t];
+                var r = Random.Range(t, texts.Count);
                 texts[t] = texts[r];
                 texts[r] = tmp;
             }
@@ -44,12 +48,12 @@
         public static void Shuffle<T>(this List<T> texts, int seed)
         {
             // Knuth shuffle algorithm with explicitly specified seed for random
-            int oldSeed = Random.seed;
+            var oldSeed = Random.seed;
             Random.seed = seed;
-            for (int t = 0; t < texts.Count; t++)
+            for (var t = 0; t < texts.Count; t++)
             {
-                T tmp = texts[t];
-                int r = Random.Range(t, texts.Count);
+                var tmp = texts[t];
+                var r = Random.Range(t, texts.Count);
                 texts[t] = texts[r];
                 texts[r] = tmp;
             }
@@ -58,7 +62,7 @@
 
         public static bool AddOrReplace<T>(this List<T> list, T value) where T : class
         {
-            int index = list.FindIndex(0, v => { return v == value; });
+            var index = list.FindIndex(0, v => { return v == value; });
             if (index > -1)
             {
                 list[index] = value;
@@ -75,10 +79,10 @@
             {
                 return "null";
             }
-            string result = "[";
+            var result = "[";
             if (list.Any())
             {
-                for (int i = 0; i < list.Count - 1; i++)
+                for (var i = 0; i < list.Count - 1; i++)
                 {
                     result += list[i] + ", ";
                 }
@@ -91,10 +95,10 @@
 
         public static string AsString<T>(this T[] list)
         {
-            string result = "[";
+            var result = "[";
             if (list.Any())
             {
-                for (int i = 0; i < list.Length - 1; i++)
+                for (var i = 0; i < list.Length - 1; i++)
                 {
                     result += list[i] + ", ";
                 }

@@ -17,13 +17,9 @@
         }
 
         public DebugType DebugType { get; protected set; }
-
         public string msg { get; protected set; }
-
         public int count { get; set; }
-
         public float Height { get; set; }
-
         public float Top { get; set; }
 
         public override string ToString()
@@ -33,8 +29,8 @@
                 return DebugType == DebugType.Main ? msg : (DebugType + ": " + msg);
             }
 
-            return this.count + "x "
-                   + (this.DebugType == DebugType.Main ? this.msg : (this.DebugType + ": " + this.msg));
+            return count + "x "
+                   + (DebugType == DebugType.Main ? msg : (DebugType + ": " + msg));
         }
 
         public override bool Equals(object obj)
@@ -112,13 +108,13 @@
 
     private class ConsoleMessage : Message
     {
-        public bool IsResponse { get; set; }
-
         public ConsoleMessage(string msg, bool isResponse, float height, float top)
             : base(msg, DebugType.Console, height, top)
         {
             IsResponse = isResponse;
         }
+
+        public bool IsResponse { get; set; }
 
         public override string ToString()
         {

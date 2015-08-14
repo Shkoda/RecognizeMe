@@ -1,7 +1,11 @@
+#region imports
+
+using UnityEngine;
+
+#endregion
+
 namespace GlobalPlay.Tools
 {
-    using UnityEngine;
-
     internal static class MathStuff
     {
         public static Vector3 RayPlaneIntersection(Vector3 planePosition, Ray ray, Vector3 planeNormal)

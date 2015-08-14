@@ -1,62 +1,60 @@
+#region imports
+
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+#endregion
+
 namespace GlobalPlay.Threading
 {
-    using System;
-    using System.Collections.Generic;
-    using UnityEngine;
-
     internal class MainThreadObject
     {
         private float defaultDeltaTime;
-
         private float deltaTime;
-
         private volatile bool once;
-
         public Action<object[]> CallBack { get; set; }
-
         public object[] Args { get; set; }
-
         public string Tag { get; set; }
 
         public float DeltaTime
         {
-            get { return this.deltaTime; }
+            get { return deltaTime; }
 
             set
             {
-                this.deltaTime = value;
-                this.defaultDeltaTime = value;
+                deltaTime = value;
+                defaultDeltaTime = value;
             }
         }
 
         public bool Once
         {
-            get { return this.once; }
+            get { return once; }
 
-            set { this.once = value; }
+            set { once = value; }
         }
 
         public void DecrementDeltaTime(float time)
         {
-            this.deltaTime -= time;
+            deltaTime -= time;
         }
 
         public void ResetTime()
         {
-            this.deltaTime = this.defaultDeltaTime;
+            deltaTime = defaultDeltaTime;
         }
     }
 
     public static class MainThread
     {
         private static readonly List<MainThreadObject> mainThreadObjects = new List<MainThreadObject>();
-
         private static bool updateBreak;
 
         internal static void Update()
         {
             MainThreadObject obj;
-            for (int index = 0; index < mainThreadObjects.Count; index++)
+            for (var index = 0; index < mainThreadObjects.Count; index++)
             {
                 lock (mainThreadObjects)
                 {
@@ -109,7 +107,7 @@ namespace GlobalPlay.Threading
                 return;
             }
 
-            int index = IndexOfCallBack(callBack);
+            var index = IndexOfCallBack(callBack);
 
             if (index == -1)
             {
@@ -186,7 +184,7 @@ namespace GlobalPlay.Threading
             // Make sure that index of callback is not changed during remove
             lock (mainThreadObjects)
             {
-                int index = IndexOfCallBack(callBack);
+                var index = IndexOfCallBack(callBack);
 
                 if (index != -1)
                 {
@@ -200,7 +198,7 @@ namespace GlobalPlay.Threading
             // Make sure that index of callback is not changed during remove
             lock (mainThreadObjects)
             {
-                int index = IndexOfCallBack(tag);
+                var index = IndexOfCallBack(tag);
 
                 if (index != -1)
                 {
@@ -213,7 +211,7 @@ namespace GlobalPlay.Threading
         {
             lock (mainThreadObjects)
             {
-                for (int i = 0; i < mainThreadObjects.Count; i++)
+                for (var i = 0; i < mainThreadObjects.Count; i++)
                 {
                     if (mainThreadObjects[i].CallBack.Equals(callBack))
                     {
@@ -229,7 +227,7 @@ namespace GlobalPlay.Threading
         {
             lock (mainThreadObjects)
             {
-                for (int i = 0; i < mainThreadObjects.Count; i++)
+                for (var i = 0; i < mainThreadObjects.Count; i++)
                 {
                     if (mainThreadObjects[i].Tag.Equals(tag))
                     {
